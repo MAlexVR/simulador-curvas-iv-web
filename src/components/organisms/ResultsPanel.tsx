@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SimulationResults, ModuleParams } from "@/types/module";
 import { exportToCSV } from "@/lib/simulation";
-import { generatePDFReport, captureChartImage } from "@/lib/pdf-generator";
+import { generatePDFReport } from "@/lib/pdf-generator";
 import { StatCard } from "@/components/molecules/StatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,22 +20,14 @@ import {
   Activity,
   FileDown,
   Loader2,
-  ImageIcon,
 } from "lucide-react";
 
 interface ResultsPanelProps {
   results: SimulationResults;
   params: ModuleParams;
-  getChartElement?: () => HTMLDivElement | null;
-  chartImageCache?: string;
 }
 
-export function ResultsPanel({ 
-  results, 
-  params, 
-  getChartElement, 
-  chartImageCache,
-}: ResultsPanelProps) {
+export function ResultsPanel({ results, params }: ResultsPanelProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleExportCSV = () => {
@@ -70,20 +62,10 @@ export function ResultsPanel({
   const handleExportPDF = async () => {
     setIsGeneratingPDF(true);
     try {
-      // Usar la imagen cacheada si existe, si no intentar capturar
-      let chartImage = chartImageCache;
-      
-      if (!chartImage && getChartElement) {
-        console.log("No cached image, attempting manual capture...");
-        const chartElement = getChartElement();
-        chartImage = await captureChartImage(chartElement);
-      }
-      
       // Generar PDF
       await generatePDFReport({
         results,
         params,
-        chartImage,
       });
     } catch (error) {
       console.error("Error generando PDF:", error);
@@ -94,7 +76,6 @@ export function ResultsPanel({
   };
 
   const isErrorAcceptable = results.errorPercent < 5;
-  const hasChartImage = !!chartImageCache;
 
   return (
     <Card className="glass">
@@ -106,7 +87,7 @@ export function ResultsPanel({
               Resultados
             </CardTitle>
           </div>
-          
+
           {/* Export buttons */}
           <div className="flex flex-wrap items-center gap-1.5">
             <Button
@@ -141,19 +122,6 @@ export function ResultsPanel({
               PDF
             </Button>
           </div>
-          
-          {/* Indicador de estado de grafica */}
-          {hasChartImage ? (
-            <p className="text-[10px] text-sena-green flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3" />
-              Grafica lista para incluir en PDF
-            </p>
-          ) : (
-            <p className="text-[10px] text-amber-500 flex items-center gap-1">
-              <ImageIcon className="w-3 h-3" />
-              Vea la grafica para capturarla
-            </p>
-          )}
         </div>
       </CardHeader>
 
@@ -206,21 +174,27 @@ export function ResultsPanel({
           </div>
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <div className="text-center">
-              <p className="text-[10px] md:text-xs text-muted-foreground">Vmpp</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground">
+                Vmpp
+              </p>
               <p className="text-sm md:text-lg font-mono font-bold">
                 {results.vmpp.toFixed(2)}
                 <span className="text-xs text-muted-foreground ml-0.5">V</span>
               </p>
             </div>
             <div className="text-center">
-              <p className="text-[10px] md:text-xs text-muted-foreground">Impp</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground">
+                Impp
+              </p>
               <p className="text-sm md:text-lg font-mono font-bold">
                 {results.impp.toFixed(2)}
                 <span className="text-xs text-muted-foreground ml-0.5">A</span>
               </p>
             </div>
             <div className="text-center">
-              <p className="text-[10px] md:text-xs text-muted-foreground">Pmax</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground">
+                Pmax
+              </p>
               <p className="text-sm md:text-lg font-mono font-bold text-sena-green">
                 {results.pmaxCalc.toFixed(1)}
                 <span className="text-xs text-muted-foreground ml-0.5">W</span>

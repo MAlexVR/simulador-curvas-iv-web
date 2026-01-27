@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import { SimulationResults, ModuleParams } from "@/types/module";
 import { loadFonts } from "./font-loader";
+import { drawIVChart } from "./pdf-charts";
 
 // Colores institucionales SENA/LEPS
 const COLORS = {
@@ -22,7 +23,6 @@ const LOGO_RATIOS = {
 interface GeneratePDFOptions {
   results: SimulationResults;
   params: ModuleParams;
-  chartImage?: string;
 }
 
 // Helper para cargar imagen como base64 con timeout
@@ -71,7 +71,6 @@ async function loadImageAsBase64(
 export async function generatePDFReport({
   results,
   params,
-  chartImage,
 }: GeneratePDFOptions): Promise<void> {
   const doc = new jsPDF({
     orientation: "portrait",
@@ -448,41 +447,22 @@ export async function generatePDFReport({
   doc.text("Curvas I-V y P-V", marginLeft, y);
   y += 8;
 
-  // Verificar si la imagen es valida
-  const isValidImage =
-    chartImage &&
-    typeof chartImage === "string" &&
-    chartImage.startsWith("data:image") &&
-    chartImage.length > 1000;
+  // DIBUJAR GRAFICA NATIVA
+  const chartHeight = 90;
+  drawIVChart(doc, results, params, marginLeft, y, contentWidth, chartHeight);
 
-  if (isValidImage) {
-    try {
-      const imgWidth = contentWidth * 0.95;
-      const imgHeight = imgWidth * 0.55;
-      const imgX = marginLeft + (contentWidth - imgWidth) / 2;
+  y += chartHeight + 10;
 
-      doc.addImage(chartImage, "PNG", imgX, y, imgWidth, imgHeight);
-      y += imgHeight + 5;
-
-      doc.setFontSize(9);
-      setColor(COLORS.gray);
-      doc.setFont("Roboto", "italic");
-      doc.text(
-        "Figura 1: Curva I-V (rojo) y Curva P-V (verde) del módulo fotovoltaico simulado",
-        pageWidth / 2,
-        y,
-        { align: "center" },
-      );
-      y += 10;
-    } catch (e) {
-      console.error("Error adding chart image:", e);
-      drawChartPlaceholder(doc, marginLeft, y, contentWidth, pageWidth);
-      y += 95;
-    }
-  } else {
-    drawChartPlaceholder(doc, marginLeft, y, contentWidth, pageWidth);
-    y += 95;
-  }
+  doc.setFontSize(9);
+  setColor(COLORS.gray);
+  doc.setFont("Roboto", "italic");
+  doc.text(
+    "Figura 1: Curvas características I-V (rojo) y P-V (verde) generadas por el simulador",
+    pageWidth / 2,
+    y,
+    { align: "center" },
+  );
+  y += 10;
 
   // PUNTO DE MAXIMA POTENCIA
   doc.setFont("Roboto", "bold");
@@ -688,134 +668,4 @@ export async function generatePDFReport({
 
   const fileName = `Simulacion_LEPS_${params.marca || "Modulo"}_${params.referencia || "PV"}_${dateStr.replace(/\./g, "-")}.pdf`;
   doc.save(fileName);
-}
-
-// Funcion auxiliar para dibujar placeholder de grafica
-function drawChartPlaceholder(
-  doc: jsPDF,
-  marginLeft: number,
-  y: number,
-  contentWidth: number,
-  pageWidth: number,
-) {
-  doc.setFontSize(10);
-  doc.setTextColor(128, 128, 128);
-  doc.setFont("Roboto", "italic");
-
-  doc.setDrawColor(128, 128, 128);
-  doc.setLineWidth(0.5);
-  doc.setLineDashPattern([3, 3], 0);
-  doc.rect(marginLeft + 10, y, contentWidth - 20, 80);
-  doc.setLineDashPattern([], 0);
-
-  doc.text("Gráfica no disponible", pageWidth / 2, y + 30, { align: "center" });
-  doc.text("Para incluir la gráfica en el PDF:", pageWidth / 2, y + 40, {
-    align: "center",
-  });
-  doc.text(
-    "1. Ejecute la simulación y espere a que se capture la gráfica",
-    pageWidth / 2,
-    y + 48,
-    { align: "center" },
-  );
-  doc.text(
-    "2. Cuando aparezca 'Gráfica lista' presione el botón PDF",
-    pageWidth / 2,
-    y + 56,
-    { align: "center" },
-  );
-}
-
-// Helper para capturar imagen del chart
-export async function captureChartImage(
-  chartRef: HTMLElement | null,
-): Promise<string | undefined> {
-  if (!chartRef) {
-    console.warn("captureChartImage: No chart reference provided");
-    return undefined;
-  }
-
-  try {
-    const html2canvas = (await import("html2canvas")).default;
-
-    // Esperar para SVG de recharts
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    const rect = chartRef.getBoundingClientRect();
-
-    if (rect.width < 10 || rect.height < 10) {
-      console.warn("Chart element too small:", rect.width, "x", rect.height);
-      return undefined;
-    }
-
-    const isMobile = window.innerWidth < 768;
-
-    const canvas = await html2canvas(chartRef, {
-      backgroundColor: "#0f172a",
-      scale: isMobile ? 1.5 : 2, // Reducir escala en movil para evitar problemas de memoria
-      logging: false,
-      useCORS: true,
-      allowTaint: true,
-      foreignObjectRendering: false,
-    });
-
-    const dataUrl = canvas.toDataURL("image/png", 0.95);
-
-    if (dataUrl.length < 1000) {
-      console.warn("Captured image too small");
-      return undefined;
-    }
-
-    return dataUrl;
-  } catch (error) {
-    console.error("Error capturing chart:", error);
-    return undefined;
-  }
-}
-
-// Funcion para capturar el chart con callback de progreso
-export async function captureChartWithProgress(
-  getChartElement: () => HTMLElement | null,
-  onProgress: (progress: number, message: string) => void,
-  maxRetries: number = 8,
-): Promise<string | undefined> {
-  onProgress(0, "Iniciando captura...");
-
-  for (let i = 0; i < maxRetries; i++) {
-    const progress = Math.round(((i + 1) / maxRetries) * 100);
-    onProgress(progress, `Capturando grafica (${i + 1}/${maxRetries})...`);
-
-    // Esperar
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    const element = getChartElement();
-
-    if (!element) {
-      continue;
-    }
-
-    // Verificar dimensiones
-    const rect = element.getBoundingClientRect();
-    if (rect.width < 50 || rect.height < 50) {
-      continue;
-    }
-
-    // Verificar SVG
-    const svg = element.querySelector("svg");
-    if (!svg) {
-      continue;
-    }
-
-    onProgress(progress, "Procesando imagen...");
-
-    const image = await captureChartImage(element);
-
-    if (image && image.startsWith("data:image") && image.length > 5000) {
-      onProgress(100, "Captura completada");
-      return image;
-    }
-  }
-
-  onProgress(100, "No se pudo capturar");
-  return undefined;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   ModuleParams,
   SimulationResults,
@@ -8,12 +8,10 @@ import {
 } from "@/types/module";
 import { defaultModule } from "@/lib/presets";
 import { runSimulation } from "@/lib/simulation";
-import { captureChartWithProgress } from "@/lib/pdf-generator";
 import { Header } from "@/components/organisms/Header";
 import { ParameterForm } from "@/components/organisms/ParameterForm";
 import { IVChart, IVChartHandle } from "@/components/organisms/IVChart";
 import { ResultsPanel } from "@/components/organisms/ResultsPanel";
-import { ChartCaptureModal } from "@/components/molecules/ChartCaptureModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,81 +35,18 @@ export function SimulatorTemplate() {
   const [isSimulating, setIsSimulating] = useState(false);
   const [activeTab, setActiveTab] = useState("params");
 
-  // Estado para captura de grafica
-  const [chartImageCache, setChartImageCache] = useState<string | undefined>(
-    undefined,
-  );
-  const [showCaptureModal, setShowCaptureModal] = useState(false);
-  const [captureProgress, setCaptureProgress] = useState(0);
-  const [captureMessage, setCaptureMessage] = useState("");
-  const [captureComplete, setCaptureComplete] = useState(false);
-  const [captureError, setCaptureError] = useState(false);
-
   const aboutRef = useRef<HTMLElement>(null);
   const chartRef = useRef<IVChartHandle>(null);
-
-  // Funcion para obtener el elemento del chart
-  const getChartElement = useCallback(() => {
-    return chartRef.current?.getChartElement() ?? null;
-  }, []);
-
-  // Capturar la grafica cuando hay resultados y se muestra la grafica
-  useEffect(() => {
-    if (results && !chartImageCache && activeTab === "chart") {
-      // Iniciar captura automatica despues de un breve delay
-      const startCapture = async () => {
-        // Esperar a que el chart se renderice (tiempo extra para moviles)
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        setShowCaptureModal(true);
-        setCaptureComplete(false);
-        setCaptureError(false);
-        setCaptureProgress(0);
-        setCaptureMessage("Preparando captura...");
-
-        const image = await captureChartWithProgress(
-          getChartElement,
-          (progress, message) => {
-            setCaptureProgress(progress);
-            setCaptureMessage(message);
-          },
-          8,
-        );
-
-        if (image) {
-          setChartImageCache(image);
-          setCaptureComplete(true);
-          setCaptureMessage("Grafica capturada exitosamente");
-
-          // Cerrar modal despues de mostrar exito
-          setTimeout(() => {
-            setShowCaptureModal(false);
-          }, 1500);
-        } else {
-          setCaptureError(true);
-          setCaptureMessage("No se pudo capturar la grafica");
-
-          // Cerrar modal despues de mostrar error
-          setTimeout(() => {
-            setShowCaptureModal(false);
-          }, 2000);
-        }
-      };
-
-      startCapture();
-    }
-  }, [results, chartImageCache, activeTab, getChartElement]);
 
   const handleSimulate = useCallback(() => {
     setIsSimulating(true);
     setError(null);
-    setChartImageCache(undefined); // Limpiar cache
 
     setTimeout(() => {
       try {
         const simulationResults = runSimulation(params);
         setResults(simulationResults);
-        setActiveTab("chart"); // Cambiar a tab de grafica para capturar
+        setActiveTab("chart");
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error en la simulacion");
         setResults(null);
@@ -126,7 +61,6 @@ export function SimulatorTemplate() {
     setResults(null);
     setError(null);
     setActiveTab("params");
-    setChartImageCache(undefined);
   };
 
   const scrollToAbout = () => {
@@ -136,15 +70,6 @@ export function SimulatorTemplate() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header onAboutClick={scrollToAbout} />
-
-      {/* Modal de captura de grafica */}
-      <ChartCaptureModal
-        isVisible={showCaptureModal}
-        progress={captureProgress}
-        message={captureMessage}
-        isComplete={captureComplete}
-        isError={captureError}
-      />
 
       {/* Mobile Layout: Tabs */}
       <main className="flex-1 container px-3 py-3 md:hidden">
@@ -223,12 +148,7 @@ export function SimulatorTemplate() {
 
           <TabsContent value="results" className="mt-0">
             {results ? (
-              <ResultsPanel
-                results={results}
-                params={params}
-                getChartElement={getChartElement}
-                chartImageCache={chartImageCache}
-              />
+              <ResultsPanel results={results} params={params} />
             ) : (
               <EmptyState />
             )}
@@ -319,12 +239,7 @@ export function SimulatorTemplate() {
           <aside className="col-span-12 lg:col-span-3">
             <div className="sticky top-20">
               {results ? (
-                <ResultsPanel
-                  results={results}
-                  params={params}
-                  getChartElement={getChartElement}
-                  chartImageCache={chartImageCache}
-                />
+                <ResultsPanel results={results} params={params} />
               ) : (
                 <Card className="glass">
                   <CardContent className="py-12 text-center">
