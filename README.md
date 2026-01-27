@@ -4,13 +4,13 @@ Aplicación web para simular el comportamiento eléctrico de paneles solares fot
 
 ## 🎨 Identidad Visual SENA/GICS
 
-| Color | Variable | Hex | Uso |
-|-------|----------|-----|-----|
-| Verde Principal | `sena-green` | `#39a900` | Botones, iconos activos |
-| Verde Oscuro | `sena-green-dark` | `#007832` | Hover, detalles |
-| Azul Marino | `sena-navy` | `#00304d` | Encabezados |
-| Amarillo | `sena-yellow` | `#fdc300` | Acentos, alertas |
-| Cian | `sena-cyan` | `#50e5f9` | Gráficos |
+| Color           | Variable          | Hex       | Uso                     |
+| --------------- | ----------------- | --------- | ----------------------- |
+| Verde Principal | `sena-green`      | `#39a900` | Botones, iconos activos |
+| Verde Oscuro    | `sena-green-dark` | `#007832` | Hover, detalles         |
+| Azul Marino     | `sena-navy`       | `#00304d` | Encabezados             |
+| Amarillo        | `sena-yellow`     | `#fdc300` | Acentos, alertas        |
+| Cian            | `sena-cyan`       | `#50e5f9` | Gráficos                |
 
 ## 🚀 Tecnologías
 
@@ -26,11 +26,13 @@ Aplicación web para simular el comportamiento eléctrico de paneles solares fot
 ## 📱 Diseño Mobile-First
 
 ### Móvil (< 768px)
+
 - Navegación por tabs: **Parámetros | Gráfica | Resultados**
 - Formulario con categorías colapsables
 - Botón de simulación sticky
 
 ### Desktop (> 768px)
+
 - Layout de 3 columnas con paneles sticky
 
 ## 📄 Exportación de Reportes
@@ -69,16 +71,17 @@ Abrir http://localhost:3000
 
 ## 📊 Categorías de Parámetros
 
-| Categoría | Descripción |
-|-----------|-------------|
-| ⚡ **Eléctrico** | Isc, Voc, Pmax - datos del fabricante |
-| ☀️ **Ambiente** | Gop (irradiancia), Top (temperatura), αi |
-| 📐 **Físico** | Área celda, Ns (serie), Np (paralelo) |
-| 🔬 **Modelo** | Factor n, Rs (serie), Rsh (shunt) |
+| Categoría        | Descripción                              |
+| ---------------- | ---------------------------------------- |
+| ⚡ **Eléctrico** | Isc, Voc, Pmax - datos del fabricante    |
+| ☀️ **Ambiente**  | Gop (irradiancia), Top (temperatura), αi |
+| 📐 **Físico**    | Área celda, Ns (serie), Np (paralelo)    |
+| 🔬 **Modelo**    | Factor n, Rs (serie), Rsh (shunt)        |
 
 ## 🔬 Método de Simulación
 
 Barry Analytical Expansion con modelo de un solo diodo:
+
 - Corriente fotogenerada (Iph)
 - Corriente de saturación inversa (I0)
 - Resistencia serie (Rs) y shunt (Rsh)
@@ -92,4 +95,5 @@ Barry Analytical Expansion con modelo de un solo diodo:
 **Organización:** Servicio Nacional de Aprendizaje - SENA
 
 ---
-© 2024 - Todos los derechos reservados
+
+© 2026 - Todos los derechos reservados

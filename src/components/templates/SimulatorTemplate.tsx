@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { ModuleParams, SimulationResults, presetToParams } from "@/types/module";
+import {
+  ModuleParams,
+  SimulationResults,
+  presetToParams,
+} from "@/types/module";
 import { defaultModule } from "@/lib/presets";
 import { runSimulation } from "@/lib/simulation";
 import { captureChartWithProgress } from "@/lib/pdf-generator";
@@ -13,32 +17,36 @@ import { ChartCaptureModal } from "@/components/molecules/ChartCaptureModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Play, 
-  Sun, 
-  Zap, 
-  AlertCircle, 
-  Settings2, 
-  LineChart, 
+import {
+  Play,
+  Sun,
+  Zap,
+  AlertCircle,
+  Settings2,
+  LineChart,
   Activity,
-  Loader2
+  Loader2,
 } from "lucide-react";
 
 export function SimulatorTemplate() {
-  const [params, setParams] = useState<ModuleParams>(presetToParams(defaultModule));
+  const [params, setParams] = useState<ModuleParams>(
+    presetToParams(defaultModule),
+  );
   const [results, setResults] = useState<SimulationResults | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSimulating, setIsSimulating] = useState(false);
   const [activeTab, setActiveTab] = useState("params");
-  
+
   // Estado para captura de grafica
-  const [chartImageCache, setChartImageCache] = useState<string | undefined>(undefined);
+  const [chartImageCache, setChartImageCache] = useState<string | undefined>(
+    undefined,
+  );
   const [showCaptureModal, setShowCaptureModal] = useState(false);
   const [captureProgress, setCaptureProgress] = useState(0);
   const [captureMessage, setCaptureMessage] = useState("");
   const [captureComplete, setCaptureComplete] = useState(false);
   const [captureError, setCaptureError] = useState(false);
-  
+
   const aboutRef = useRef<HTMLElement>(null);
   const chartRef = useRef<IVChartHandle>(null);
 
@@ -53,28 +61,28 @@ export function SimulatorTemplate() {
       // Iniciar captura automatica despues de un breve delay
       const startCapture = async () => {
         // Esperar a que el chart se renderice
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
+        await new Promise((resolve) => setTimeout(resolve, 800));
+
         setShowCaptureModal(true);
         setCaptureComplete(false);
         setCaptureError(false);
         setCaptureProgress(0);
         setCaptureMessage("Preparando captura...");
-        
+
         const image = await captureChartWithProgress(
           getChartElement,
           (progress, message) => {
             setCaptureProgress(progress);
             setCaptureMessage(message);
           },
-          8
+          8,
         );
-        
+
         if (image) {
           setChartImageCache(image);
           setCaptureComplete(true);
           setCaptureMessage("Grafica capturada exitosamente");
-          
+
           // Cerrar modal despues de mostrar exito
           setTimeout(() => {
             setShowCaptureModal(false);
@@ -82,14 +90,14 @@ export function SimulatorTemplate() {
         } else {
           setCaptureError(true);
           setCaptureMessage("No se pudo capturar la grafica");
-          
+
           // Cerrar modal despues de mostrar error
           setTimeout(() => {
             setShowCaptureModal(false);
           }, 2000);
         }
       };
-      
+
       startCapture();
     }
   }, [results, chartImageCache, activeTab, getChartElement]);
@@ -140,7 +148,11 @@ export function SimulatorTemplate() {
 
       {/* Mobile Layout: Tabs */}
       <main className="flex-1 container px-3 py-3 md:hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex flex-col"
+        >
           <TabsList className="grid w-full grid-cols-3 mb-3">
             <TabsTrigger value="params" className="text-xs">
               <Settings2 className="w-3.5 h-3.5 mr-1" />
@@ -150,7 +162,11 @@ export function SimulatorTemplate() {
               <LineChart className="w-3.5 h-3.5 mr-1" />
               Grafica
             </TabsTrigger>
-            <TabsTrigger value="results" className="text-xs" disabled={!results}>
+            <TabsTrigger
+              value="results"
+              className="text-xs"
+              disabled={!results}
+            >
               <Activity className="w-3.5 h-3.5 mr-1" />
               Resultados
             </TabsTrigger>
@@ -167,8 +183,12 @@ export function SimulatorTemplate() {
           )}
 
           <TabsContent value="params" className="mt-0 space-y-3 flex-1">
-            <ParameterForm params={params} onChange={setParams} onReset={handleReset} />
-            
+            <ParameterForm
+              params={params}
+              onChange={setParams}
+              onReset={handleReset}
+            />
+
             <div className="sticky bottom-3 pt-2">
               <Button
                 onClick={handleSimulate}
@@ -203,9 +223,9 @@ export function SimulatorTemplate() {
 
           <TabsContent value="results" className="mt-0">
             {results ? (
-              <ResultsPanel 
-                results={results} 
-                params={params} 
+              <ResultsPanel
+                results={results}
+                params={params}
                 getChartElement={getChartElement}
                 chartImageCache={chartImageCache}
               />
@@ -222,7 +242,9 @@ export function SimulatorTemplate() {
           <div className="mb-4 p-4 bg-destructive/10 border border-destructive/30 rounded-lg flex items-start gap-3 max-w-2xl mx-auto">
             <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-destructive">Error en la simulacion</p>
+              <p className="font-medium text-destructive">
+                Error en la simulacion
+              </p>
               <p className="text-sm text-muted-foreground">{error}</p>
             </div>
           </div>
@@ -232,8 +254,12 @@ export function SimulatorTemplate() {
           {/* Columna izquierda: Parametros */}
           <aside className="col-span-12 lg:col-span-3">
             <div className="sticky top-20 space-y-4">
-              <ParameterForm params={params} onChange={setParams} onReset={handleReset} />
-              
+              <ParameterForm
+                params={params}
+                onChange={setParams}
+                onReset={handleReset}
+              />
+
               <Button
                 onClick={handleSimulate}
                 disabled={isSimulating}
@@ -277,7 +303,10 @@ export function SimulatorTemplate() {
                     </h3>
                     <p className="text-sm text-muted-foreground max-w-xs mx-auto">
                       Configure los parametros del modulo y presione
-                      <span className="text-sena-green font-medium"> "Ejecutar Simulacion" </span>
+                      <span className="text-sena-green font-medium">
+                        {" "}
+                        "Ejecutar Simulacion"{" "}
+                      </span>
                       para generar las curvas.
                     </p>
                   </CardContent>
@@ -290,9 +319,9 @@ export function SimulatorTemplate() {
           <aside className="col-span-12 lg:col-span-3">
             <div className="sticky top-20">
               {results ? (
-                <ResultsPanel 
-                  results={results} 
-                  params={params} 
+                <ResultsPanel
+                  results={results}
+                  params={params}
                   getChartElement={getChartElement}
                   chartImageCache={chartImageCache}
                 />
@@ -312,20 +341,29 @@ export function SimulatorTemplate() {
       </main>
 
       {/* Footer - Acerca de */}
-      <footer ref={aboutRef} className="border-t bg-muted/30 mt-auto scroll-mt-4">
+      <footer
+        ref={aboutRef}
+        className="border-t bg-muted/30 mt-auto scroll-mt-4"
+      >
         <div className="container px-4 py-6 md:py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-sm">
             <div>
-              <h3 className="font-semibold mb-2 text-sena-green">Que es este simulador?</h3>
+              <h3 className="font-semibold mb-2 text-sena-green">
+                Que es este simulador?
+              </h3>
               <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">
-                Esta herramienta permite simular el comportamiento electrico de paneles solares 
-                fotovoltaicos. Genera las curvas caracteristicas <strong className="text-foreground">I-V</strong> (Corriente vs Voltaje) 
-                y <strong className="text-foreground">P-V</strong> (Potencia vs Voltaje) utilizando el metodo matematico 
-                Barry Analytical Expansion basado en el modelo de un solo diodo.
+                Esta herramienta permite simular el comportamiento electrico de
+                paneles solares fotovoltaicos. Genera las curvas caracteristicas{" "}
+                <strong className="text-foreground">I-V</strong> (Corriente vs
+                Voltaje) y <strong className="text-foreground">P-V</strong>{" "}
+                (Potencia vs Voltaje) utilizando el metodo matematico Barry
+                Analytical Expansion basado en el modelo de un solo diodo.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2 text-sena-green">Caracteristicas</h3>
+              <h3 className="font-semibold mb-2 text-sena-green">
+                Caracteristicas
+              </h3>
               <ul className="text-xs md:text-sm text-muted-foreground space-y-1">
                 <li>- Modelo de un diodo con resistencias Rs y Rsh</li>
                 <li>- Correccion por temperatura de operacion</li>
@@ -337,16 +375,18 @@ export function SimulatorTemplate() {
             <div>
               <h3 className="font-semibold mb-2 text-sena-green">Creditos</h3>
               <p className="text-xs md:text-sm text-muted-foreground">
-                <strong className="text-foreground">Autor:</strong> Mauricio Alexander Vargas Rodriguez
+                <strong className="text-foreground">Autor:</strong> Mauricio
+                Alexander Vargas Rodriguez
               </p>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                <strong className="text-foreground">Institucion:</strong> Centro de Electricidad, Electronica y Telecomunicaciones (CEET)
+                <strong className="text-foreground">Institucion:</strong> Centro
+                de Electricidad, Electronica y Telecomunicaciones (CEET)
               </p>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
                 Servicio Nacional de Aprendizaje - SENA
               </p>
               <p className="text-[10px] md:text-xs text-muted-foreground/70 mt-3">
-                Version Web 2.1 - Next.js 15 - 2024
+                Version Web 2.1 - Next.js 15 - 2026
               </p>
             </div>
           </div>
