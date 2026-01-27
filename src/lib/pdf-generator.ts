@@ -748,9 +748,11 @@ export async function captureChartImage(
       return undefined;
     }
 
+    const isMobile = window.innerWidth < 768;
+
     const canvas = await html2canvas(chartRef, {
       backgroundColor: "#0f172a",
-      scale: 2,
+      scale: isMobile ? 1.5 : 2, // Reducir escala en movil para evitar problemas de memoria
       logging: false,
       useCORS: true,
       allowTaint: true,
@@ -784,7 +786,7 @@ export async function captureChartWithProgress(
     onProgress(progress, `Capturando grafica (${i + 1}/${maxRetries})...`);
 
     // Esperar
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const element = getChartElement();
 
@@ -794,7 +796,7 @@ export async function captureChartWithProgress(
 
     // Verificar dimensiones
     const rect = element.getBoundingClientRect();
-    if (rect.width < 100 || rect.height < 100) {
+    if (rect.width < 50 || rect.height < 50) {
       continue;
     }
 

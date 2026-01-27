@@ -60,8 +60,8 @@ export function SimulatorTemplate() {
     if (results && !chartImageCache && activeTab === "chart") {
       // Iniciar captura automatica despues de un breve delay
       const startCapture = async () => {
-        // Esperar a que el chart se renderice
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        // Esperar a que el chart se renderice (tiempo extra para moviles)
+        await new Promise((resolve) => setTimeout(resolve, 1500));
 
         setShowCaptureModal(true);
         setCaptureComplete(false);
