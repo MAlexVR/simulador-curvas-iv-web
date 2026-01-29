@@ -12,12 +12,12 @@ Aplicación web para simular el comportamiento eléctrico de paneles solares fot
 
 ### Modelos Matemáticos Disponibles
 
-| Modelo                         | Descripción                             | Método de Solución                      |
-| ------------------------------ | --------------------------------------- | --------------------------------------- |
-| **SDM**                        | Modelo de 1 Diodo (Single Diode Model)  | Newton-Raphson iterativo                |
-| **DDM**                        | Modelo de 2 Diodos (Double Diode Model) | Newton-Raphson con A1=1, A2=2           |
-| **TDM**                        | Modelo de 3 Diodos (Triple Diode Model) | Newton-Raphson con A1=1, A2=1.2, A3=2.5 |
-| **Barry Analytical Expansion** | Solución analítica explícita            | Función W de Lambert                    |
+| Modelo                                       | Descripción                             | Método de Solución                      |
+| -------------------------------------------- | --------------------------------------- | --------------------------------------- |
+| **SDM**                                      | Modelo de 1 Diodo (Single Diode Model)  | Newton-Raphson iterativo                |
+| **DDM**                                      | Modelo de 2 Diodos (Double Diode Model) | Newton-Raphson con A1=1, A2=2           |
+| **TDM**                                      | Modelo de 3 Diodos (Triple Diode Model) | Newton-Raphson con A1=1, A2=1.2, A3=2.5 |
+| **Lambert W - Expansión analítica de Barry** | Solución analítica explícita            | Función W de Lambert                    |
 
 ### Funcionalidades
 

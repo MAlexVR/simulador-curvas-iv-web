@@ -304,7 +304,7 @@ export const MODEL_NAMES: Record<ModelType, string> = {
   sdm: "Modelo de 1 Diodo (SDM)",
   ddm: "Modelo de 2 Diodos (DDM)",
   tdm: "Modelo de 3 Diodos (TDM)",
-  lambert: "Barry Analytical Expansion",
+  lambert: "Lambert W - Expansión analítica de Barry",
 };
 
 export function runSimulation(params: ModuleParams): SimulationResults {

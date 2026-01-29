@@ -301,8 +301,8 @@ export function SimulatorTemplate() {
                   • <strong>TDM:</strong> Modelo de tres diodos (Olayiwola)
                 </li>
                 <li>
-                  • <strong>Barry Analytical Expansion:</strong> Solución
-                  analítica explícita
+                  • <strong>Lambert W - Expansión analítica de Barry:</strong>{" "}
+                  Solución analítica explícita
                 </li>
                 <li>• Corrección por temperatura e irradiancia</li>
                 <li>• Exportación a CSV, Excel y PDF</li>
