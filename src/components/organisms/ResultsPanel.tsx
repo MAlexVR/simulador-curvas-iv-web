@@ -169,7 +169,7 @@ export function ResultsPanel({ results, params }: ResultsPanelProps) {
           <div className="flex items-center gap-2 mb-2 md:mb-3">
             <span className="w-2 h-2 rounded-full bg-sena-green animate-pulse" />
             <span className="text-xs md:text-sm font-semibold text-sena-green">
-              Punto de Maxima Potencia (MPP)
+              Punto de Máxima Potencia (MPP)
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2 md:gap-4">
@@ -205,8 +205,13 @@ export function ResultsPanel({ results, params }: ResultsPanelProps) {
 
         {/* Modelo matemático */}
         <div className="flex items-center justify-between p-2 rounded-lg bg-sena-yellow/10 border border-sena-yellow/20">
-          <span className="text-[10px] md:text-xs text-muted-foreground">Modelo:</span>
-          <Badge variant="secondary" className="text-[10px] md:text-xs bg-sena-yellow/20 text-sena-yellow border-sena-yellow/30">
+          <span className="text-[10px] md:text-xs text-muted-foreground">
+            Modelo:
+          </span>
+          <Badge
+            variant="secondary"
+            className="text-[10px] md:text-xs bg-sena-yellow/20 text-sena-yellow border-sena-yellow/30"
+          >
             {results.modelName}
           </Badge>
         </div>
@@ -214,7 +219,7 @@ export function ResultsPanel({ results, params }: ResultsPanelProps) {
         {/* Parametros calculados */}
         <div className="p-3 bg-muted/30 rounded-lg">
           <p className="text-xs font-medium text-muted-foreground mb-2">
-            Parametros Calculados
+            Parámetros Calculados
           </p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[10px] md:text-xs">
             <div className="flex justify-between">
@@ -247,7 +252,7 @@ export function ResultsPanel({ results, params }: ResultsPanelProps) {
             </p>
           </div>
           <Badge variant={isErrorAcceptable ? "volt" : "current"}>
-            {isErrorAcceptable ? "Valido" : "Revisar"}
+            {isErrorAcceptable ? "Válido" : "Revisar"}
           </Badge>
         </div>
       </CardContent>
