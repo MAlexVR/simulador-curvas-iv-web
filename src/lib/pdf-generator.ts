@@ -444,7 +444,7 @@ export async function generatePDFReport({
   doc.setFontSize(16);
   setColor(COLORS.lepsNavy);
   doc.text("Curvas I-V y P-V", marginLeft, y);
-  y += 4;
+  y += 8; // Increased spacing
 
   doc.setFont("Roboto", "normal");
   doc.setFontSize(10);
@@ -456,7 +456,7 @@ export async function generatePDFReport({
   const chartHeight = 90;
   drawIVChart(doc, results, params, marginLeft, y, contentWidth, chartHeight);
 
-  y += chartHeight + 3; // Reduced spacing
+  y += chartHeight - 5; // Reduced spacing significantly to be closer to chart axis
 
   doc.setFontSize(9);
   setColor(COLORS.gray);
