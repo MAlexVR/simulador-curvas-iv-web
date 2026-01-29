@@ -257,9 +257,10 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     activeDot={{ r: 4, fill: "#39a900" }}
                   />
 
-                  {/* Líneas de referencia MPP */}
+                  {/* Líneas de referencia estilo informe (punteadas a los ejes) */}
                   {showLabels && (
                     <>
+                      {/* Vmpp (Vertical) */}
                       <ReferenceLine
                         yAxisId="current"
                         x={results.vmpp}
@@ -267,12 +268,21 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                         strokeDasharray="4 4"
                         opacity={0.7}
                       />
+                      {/* Impp (Horizontal eje I) */}
                       <ReferenceLine
                         yAxisId="current"
                         y={results.impp}
                         stroke="#fdc300"
                         strokeDasharray="4 4"
                         opacity={0.7}
+                      />
+                      {/* Pmax (Horizontal eje P) */}
+                      <ReferenceLine
+                        yAxisId="power"
+                        y={results.pmaxCalc}
+                        stroke="#39a900"
+                        strokeDasharray="4 4"
+                        opacity={0.5}
                       />
                     </>
                   )}
@@ -287,6 +297,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     stroke="#fdc300"
                     strokeWidth={2}
                     isFront={true}
+                    ifOverflow="visible"
                   />
 
                   <ReferenceDot
@@ -298,6 +309,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     stroke="#39a900"
                     strokeWidth={2}
                     isFront={true}
+                    ifOverflow="visible"
                   />
 
                   <ReferenceDot
@@ -307,17 +319,20 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     r={4}
                     fill="#ef4444"
                     isFront={true}
+                    ifOverflow="visible"
                   />
 
-                  {/* Punto Voc - Asegurar que se renderice */}
+                  {/* Punto Voc - Con ifOverflow para asegurar visibilidad */}
                   <ReferenceDot
                     yAxisId="current"
                     x={params.voc}
                     y={0}
-                    r={4}
-                    fill="#2563eb" // Azul más brillante/visible
-                    stroke="#2563eb"
+                    r={5}
+                    fill="#2563eb"
+                    stroke="#fff"
+                    strokeWidth={1}
                     isFront={true}
+                    ifOverflow="visible"
                   />
                 </ComposedChart>
               </ResponsiveContainer>
