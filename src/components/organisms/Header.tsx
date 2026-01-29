@@ -1,6 +1,6 @@
 "use client";
 
-import { Sun, Zap, Info, Menu, X } from "lucide-react";
+import { Sun, Zap, Info, Menu, X, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
@@ -65,6 +65,13 @@ export function Header({ onAboutClick }: HeaderProps) {
       {menuOpen && (
         <div className="md:hidden border-t bg-background/95 backdrop-blur-xl">
           <div className="container px-4 py-3 space-y-2">
+            <UserManualModal
+              triggerVariant="ghost"
+              triggerClassName="w-full justify-start"
+            >
+              <HelpCircle className="w-4 h-4 mr-2" />
+              Manual de Usuario
+            </UserManualModal>
             <Button
               variant="ghost"
               className="w-full justify-start"

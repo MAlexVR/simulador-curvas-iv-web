@@ -15,14 +15,38 @@ import {
   Download,
 } from "lucide-react";
 
-export function UserManualModal() {
+interface UserManualModalProps {
+  triggerClassName?: string;
+  triggerVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  children?: React.ReactNode;
+}
+
+export function UserManualModal({
+  triggerClassName = "",
+  triggerVariant = "outline",
+  children,
+}: UserManualModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <HelpCircle className="h-4 w-4 text-sena-green" />
-          <span className="hidden md:inline">Manual de Usuario</span>
-          <span className="md:hidden">Ayuda</span>
+        <Button
+          variant={triggerVariant}
+          size="sm"
+          className={`gap-2 ${triggerClassName}`}
+        >
+          {children || (
+            <>
+              <HelpCircle className="h-4 w-4 text-sena-green" />
+              <span className="hidden md:inline">Manual de Usuario</span>
+              <span className="md:hidden">Ayuda</span>
+            </>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
