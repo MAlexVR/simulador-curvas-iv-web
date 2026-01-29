@@ -40,7 +40,7 @@ export function Header({ onAboutClick }: HeaderProps) {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-3">
           <Badge className="text-xs bg-sena-green/20 text-sena-green border-sena-green/30">
-            v2.1
+            v2.3
           </Badge>
           <Button variant="ghost" size="sm" onClick={handleAboutClick}>
             <Info className="w-4 h-4 mr-1" />
@@ -74,7 +74,7 @@ export function Header({ onAboutClick }: HeaderProps) {
             <div className="flex items-center justify-between pt-2 border-t">
               <span className="text-xs text-muted-foreground">SENA - CEET</span>
               <Badge className="text-xs bg-sena-green/20 text-sena-green border-sena-green/30">
-                v2.1
+                v2.3
               </Badge>
             </div>
           </div>

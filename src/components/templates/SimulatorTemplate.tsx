@@ -24,6 +24,7 @@ import {
   LineChart,
   Activity,
   Loader2,
+  BookOpen,
 } from "lucide-react";
 
 export function SimulatorTemplate() {
@@ -199,9 +200,12 @@ export function SimulatorTemplate() {
                 )}
               </Button>
 
-              <div className="text-center text-xs text-muted-foreground space-y-0.5 pt-2">
-                <p>Centro de Electricidad, Electronica</p>
-                <p>y Telecomunicaciones - SENA</p>
+              <div className="flex justify-center pt-4">
+                <img
+                  src="/logo-centro-formacion.svg"
+                  alt="Centro de Electricidad, Electrónica y Telecomunicaciones - SENA"
+                  className="h-16 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
           </aside>
@@ -261,47 +265,91 @@ export function SimulatorTemplate() {
         className="border-t bg-muted/30 mt-auto scroll-mt-4"
       >
         <div className="container px-4 py-6 md:py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-sm">
             <div>
+              <div className="mb-4">
+                <img
+                  src="/logo-grupo-investigacion.svg"
+                  alt="Grupo de Investigación"
+                  className="h-14 w-auto object-contain"
+                />
+              </div>
               <h3 className="font-semibold mb-2 text-sena-green">
-                Que es este simulador?
+                ¿Qué es este simulador?
               </h3>
               <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">
-                Esta herramienta permite simular el comportamiento electrico de
-                paneles solares fotovoltaicos. Genera las curvas caracteristicas{" "}
+                Esta herramienta permite simular el comportamiento eléctrico de
+                paneles solares fotovoltaicos. Genera las curvas características{" "}
                 <strong className="text-foreground">I-V</strong> (Corriente vs
                 Voltaje) y <strong className="text-foreground">P-V</strong>{" "}
-                (Potencia vs Voltaje) utilizando el metodo matematico Barry
-                Analytical Expansion basado en el modelo de un solo diodo.
+                (Potencia vs Voltaje) utilizando modelos de circuito equivalente
+                con uno, dos o tres diodos.
               </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2 text-sena-green">
-                Caracteristicas
+                Modelos disponibles
               </h3>
               <ul className="text-xs md:text-sm text-muted-foreground space-y-1">
-                <li>- Modelo de un diodo con resistencias Rs y Rsh</li>
-                <li>- Correccion por temperatura de operacion</li>
-                <li>- Correccion por nivel de irradiancia solar</li>
-                <li>- Calculo del punto de maxima potencia (MPP)</li>
-                <li>- Exportacion a CSV, Excel y PDF</li>
+                <li>
+                  • <strong>SDM:</strong> Modelo de un diodo (Newton-Raphson)
+                </li>
+                <li>
+                  • <strong>DDM:</strong> Modelo de dos diodos (A1=1, A2=2)
+                </li>
+                <li>
+                  • <strong>TDM:</strong> Modelo de tres diodos (Olayiwola)
+                </li>
+                <li>
+                  • <strong>Lambert W:</strong> Solución analítica de Barry
+                </li>
+                <li>• Corrección por temperatura e irradiancia</li>
+                <li>• Exportación a CSV, Excel y PDF</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-2 text-sena-green">Creditos</h3>
+              <h3 className="font-semibold mb-2 text-sena-green flex items-center gap-1">
+                <BookOpen className="w-4 h-4" />
+                Referencias (APA 7)
+              </h3>
+              <div className="text-[10px] md:text-xs text-muted-foreground space-y-2">
+                <p>
+                  Olayiwola, T. N., Hyun, S. H., & Choi, S. J. (2024).
+                  Photovoltaic modeling: A comprehensive analysis of the I–V
+                  characteristic curve. <em>Sustainability, 16</em>(1), 432.
+                </p>
+                <p>
+                  Abbassi, A., Dami, M. A., & Jemli, M. (2017). Parameters
+                  identification of photovoltaic modules based on numerical
+                  approach. <em>IEEE Xplore</em>.
+                </p>
+                <p>
+                  Barry, D. A., et al. (2000). Analytical approximations for
+                  real values of the Lambert W-function.{" "}
+                  <em>Mathematics and Computers in Simulation, 53</em>(1-2),
+                  95-103.
+                </p>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2 text-sena-green">Créditos</h3>
               <p className="text-xs md:text-sm text-muted-foreground">
                 <strong className="text-foreground">Autor:</strong> Mauricio
-                Alexander Vargas Rodriguez
+                Alexander Vargas Rodríguez
               </p>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                <strong className="text-foreground">Institucion:</strong> Centro
-                de Electricidad, Electronica y Telecomunicaciones (CEET)
+                <strong className="text-foreground">Institución:</strong> Centro
+                de Electricidad, Electrónica y Telecomunicaciones (CEET)
               </p>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
                 Servicio Nacional de Aprendizaje - SENA
               </p>
+              <p className="text-xs md:text-sm text-muted-foreground mt-1">
+                <strong className="text-foreground">Laboratorio:</strong> LEPS -
+                Laboratorio de Ensayos para Paneles Solares
+              </p>
               <p className="text-[10px] md:text-xs text-muted-foreground/70 mt-3">
-                Version Web 2.1 - Next.js 15 - 2026
+                Versión Web 2.3 - Next.js 15 - 2026
               </p>
             </div>
           </div>
@@ -317,7 +365,7 @@ function EmptyState() {
       <CardContent className="text-center p-6">
         <Sun className="w-12 h-12 text-sena-green/30 mx-auto mb-3" />
         <p className="text-sm text-muted-foreground">
-          Ejecuta la simulacion para ver los resultados
+          Ejecuta la simulación para ver los resultados
         </p>
       </CardContent>
     </Card>

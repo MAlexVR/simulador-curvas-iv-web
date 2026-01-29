@@ -176,7 +176,7 @@ export async function generatePDFReport({
     doc.setFont("Roboto", "normal");
 
     doc.rect(versionBoxX, versionBoxY, 40, 5);
-    doc.text("Version 2.1", versionBoxX + 20, versionBoxY + 3.5, {
+    doc.text("Version 2.3", versionBoxX + 20, versionBoxY + 3.5, {
       align: "center",
     });
 
@@ -335,12 +335,12 @@ export async function generatePDFReport({
 
   doc.setFontSize(10);
   doc.setFont("Roboto", "normal");
-  // Unicode support enabled
   const conditions = [
     ["Irradiancia de operación Gop (W/m²):", `${params.gop}`],
     ["Temperatura de operación Top (°C):", `${params.top}`],
     ["Coeficiente de temperatura Isc αi (%/°C):", `${params.alphaI}`],
-    ["Método de cálculo:", "Barry Analytical Expansion"],
+    ["Coeficiente de temperatura Voc βv (V/°C):", `${params.betaV}`],
+    ["Modelo matemático:", results.modelName],
   ];
 
   conditions.forEach(([label, value]) => {
@@ -383,7 +383,6 @@ export async function generatePDFReport({
 
   doc.setFont("Roboto", "normal");
 
-  // Unicode support enabled
   const resultsData = [
     ["Corriente de cortocircuito", "Isc", params.isc.toFixed(3), "A"],
     ["Voltaje de circuito abierto", "Voc", params.voc.toFixed(3), "V"],
@@ -445,13 +444,19 @@ export async function generatePDFReport({
   doc.setFontSize(16);
   setColor(COLORS.lepsNavy);
   doc.text("Curvas I-V y P-V", marginLeft, y);
-  y += 8;
+  y += 4;
+
+  doc.setFont("Roboto", "normal");
+  doc.setFontSize(10);
+  setColor(COLORS.gray);
+  doc.text(`Modelo: ${results.modelName}`, marginLeft, y);
+  y += 6;
 
   // DIBUJAR GRAFICA NATIVA
   const chartHeight = 90;
   drawIVChart(doc, results, params, marginLeft, y, contentWidth, chartHeight);
 
-  y += chartHeight + 10;
+  y += chartHeight + 3; // Reduced spacing
 
   doc.setFontSize(9);
   setColor(COLORS.gray);
@@ -514,16 +519,17 @@ export async function generatePDFReport({
   doc.setFont("Roboto", "normal");
   setColor(COLORS.black);
 
-  // Unicode support
   const inputParams = [
     ["Corriente de corto-circuito Isc (A):", `${params.isc}`],
     ["Voltaje de circuito abierto Voc (V):", `${params.voc}`],
+    ["Voltaje en MPP fabricante Vm (V):", `${params.vm}`],
+    ["Corriente en MPP fabricante Im (A):", `${params.im}`],
     ["Pmax fabricante (W):", `${params.pmax}`],
     ["Número de celdas en serie Ns:", `${params.ns}`],
     ["Número de celdas en paralelo Np:", `${params.np}`],
     ["Resistencia serie Rs (Ω):", `${params.rs}`],
     ["Resistencia shunt Rsh (Ω):", `${params.rsh}`],
-    ["Factor de idealidad n:", `${params.n}`],
+    ["Factor de idealidad η:", `${params.n}`],
     ["Área de la celda Acelda (m²):", `${params.acelda}`],
   ];
 
@@ -537,7 +543,7 @@ export async function generatePDFReport({
     y += 5.5;
   });
 
-  y += 8;
+  y += 6;
 
   // PARAMETROS CALCULADOS
   doc.setFont("Roboto", "bold");
@@ -549,7 +555,6 @@ export async function generatePDFReport({
   doc.setFontSize(10);
   setColor(COLORS.black);
 
-  // Unicode support
   const modelParams = [
     ["Corriente fotogenerada (Iph)", `${results.iph.toFixed(6)} A`],
     ["Corriente de saturación (I₀)", `${results.i0.toExponential(4)} A`],
@@ -567,7 +572,7 @@ export async function generatePDFReport({
     y += 5.5;
   });
 
-  y += 8;
+  y += 6;
 
   // COMPARACION CON FABRICANTE
   doc.setFont("Roboto", "bold");
@@ -630,7 +635,7 @@ export async function generatePDFReport({
 
   doc.line(marginLeft, y - 2, marginLeft + contentWidth, y - 2);
 
-  y += 10;
+  y += 8;
 
   // NOTAS
   doc.setFont("Roboto", "bold");
@@ -643,11 +648,18 @@ export async function generatePDFReport({
   doc.setFont("Roboto", "normal");
   setColor(COLORS.black);
 
+  const modelDescription = {
+    sdm: "Modelo de un diodo con resolución Newton-Raphson.",
+    ddm: "Modelo de dos diodos con factores de idealidad A1=1 y A2=2.",
+    tdm: "Modelo de tres diodos con factores A1=1, A2=1.2 y A3=2.5.",
+    lambert:
+      "Solución explícita mediante función W de Lambert (Barry Analytical Expansion).",
+  };
+
   const notes = [
-    "1. Los resultados se basan en el modelo de un diodo con resistencias serie (Rs) y shunt (Rsh).",
-    "2. El método de cálculo utilizado es Barry Analytical Expansion.",
-    "3. Las condiciones de simulación corresponden a las condiciones estándar de prueba (STC):",
-    "   Irradiancia: 1000 W/m², Temperatura: 25 °C.",
+    `1. Modelo utilizado: ${modelDescription[results.modelo]}`,
+    "2. Parámetros térmicos calculados según Abbassi et al. (2017).",
+    "3. Las condiciones de simulación corresponden a las especificadas por el usuario.",
     "4. El factor de llenado (FF) y la eficiencia son valores derivados de la simulación.",
     "5. Un error menor al 5% respecto al fabricante se considera aceptable.",
   ];
@@ -657,10 +669,87 @@ export async function generatePDFReport({
     y += 4.5;
   });
 
+  drawFooter();
+
+  // =====================================================================
+  // PÁGINA 4: REFERENCIAS BIBLIOGRÁFICAS
+  // =====================================================================
+  doc.addPage();
+  currentPage = 4;
+  y = 25;
+
+  // Header de página 4
+  drawHeader(4);
+
+  doc.setFont("Roboto", "bold");
+  doc.setFontSize(14);
+  setColor(COLORS.lepsNavy);
+  doc.text("Referencias Bibliográficas", pageWidth / 2, y, { align: "center" });
+  y += 3;
+
+  // Línea decorativa
+  doc.setDrawColor(
+    COLORS.senaGreen[0],
+    COLORS.senaGreen[1],
+    COLORS.senaGreen[2],
+  );
+  doc.setLineWidth(0.5);
+  doc.line(marginLeft + 40, y, pageWidth - marginRight - 40, y);
   y += 10;
-  doc.setFontSize(9);
+
+  doc.setFontSize(10);
+  doc.setFont("Roboto", "normal");
+  setColor(COLORS.black);
+
+  // Referencias con texto usando splitTextToSize para aprovechar ancho completo
+  const refTexts = [
+    "Olayiwola, T. N., Hyun, S. H., & Choi, S. J. (2024). Photovoltaic modeling: A comprehensive analysis of the I–V characteristic curve. Sustainability, 16(1), 432. https://doi.org/10.3390/su16010432",
+    "Abbassi, A., Dami, M. A., & Jemli, M. (2017). Parameters identification of photovoltaic modules based on numerical approach for the single-diode model. In 2017 International Conference on Green Energy Conversion Systems (GECS) (pp. 1-6). IEEE. https://doi.org/10.1109/GECS.2017.8066216",
+    "Barry, D. A., Parlange, J. Y., Li, L., Prommer, H., Cunningham, C. J., & Stagnitti, F. (2000). Analytical approximations for real values of the Lambert W-function. Mathematics and Computers in Simulation, 53(1-2), 95-103. https://doi.org/10.1016/S0378-4754(00)00172-5",
+  ];
+
+  refTexts.forEach((refText, index) => {
+    // Usar sangría francesa: primera línea sin sangría, resto con sangría
+    const lines = doc.splitTextToSize(refText, contentWidth - 10);
+    lines.forEach((line: string, lineIndex: number) => {
+      const xPos = lineIndex === 0 ? marginLeft : marginLeft + 10; // Sangría francesa
+      doc.text(line, xPos, y);
+      y += 5;
+    });
+    if (index < refTexts.length - 1) {
+      y += 6; // Espacio entre referencias
+    }
+  });
+
+  y += 20;
+
+  // Mensaje de fin de informe
+  doc.setFontSize(10);
   setColor(COLORS.gray);
-  doc.text("---- Fin del informe de simulación ----", pageWidth / 2, y, {
+  doc.text("— Fin del informe de simulación —", pageWidth / 2, y, {
+    align: "center",
+  });
+
+  y += 15;
+
+  // Información adicional
+  doc.setFontSize(9);
+  setColor(COLORS.lepsNavy);
+  doc.text(
+    "Laboratorio de Ensayos para Paneles Solares (LEPS)",
+    pageWidth / 2,
+    y,
+    { align: "center" },
+  );
+  y += 5;
+  doc.text(
+    "Centro de Electricidad, Electrónica y Telecomunicaciones",
+    pageWidth / 2,
+    y,
+    { align: "center" },
+  );
+  y += 5;
+  doc.text("Servicio Nacional de Aprendizaje - SENA", pageWidth / 2, y, {
     align: "center",
   });
 

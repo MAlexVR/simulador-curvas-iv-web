@@ -1,99 +1,144 @@
-# Simulador de Curvas I-V y P-V v2.1
+# Simulador de Curvas I-V y P-V para Módulos Fotovoltaicos
 
-Aplicación web para simular el comportamiento eléctrico de paneles solares fotovoltaicos. Genera las curvas características **I-V** (Corriente vs Voltaje) y **P-V** (Potencia vs Voltaje) utilizando el método matemático Barry Analytical Expansion.
+**Versión 2.2** - Laboratorio de Ensayos para Paneles Solares (LEPS)  
+Centro de Electricidad, Electrónica y Telecomunicaciones (CEET)  
+Servicio Nacional de Aprendizaje - SENA
 
-## 🎨 Identidad Visual SENA/GICS
+## 📋 Descripción
 
-| Color           | Variable          | Hex       | Uso                     |
-| --------------- | ----------------- | --------- | ----------------------- |
-| Verde Principal | `sena-green`      | `#39a900` | Botones, iconos activos |
-| Verde Oscuro    | `sena-green-dark` | `#007832` | Hover, detalles         |
-| Azul Marino     | `sena-navy`       | `#00304d` | Encabezados             |
-| Amarillo        | `sena-yellow`     | `#fdc300` | Acentos, alertas        |
-| Cian            | `sena-cyan`       | `#50e5f9` | Gráficos                |
+Aplicación web para simular el comportamiento eléctrico de paneles solares fotovoltaicos, generando las curvas características I-V (Corriente vs Voltaje) y P-V (Potencia vs Voltaje). Implementa múltiples modelos de circuito equivalente basados en literatura científica revisada por pares.
 
-## 🚀 Tecnologías
+## ✨ Características Principales
 
-- **Next.js 15** con App Router y Turbopack
-- **React 19** con Server Components
-- **TypeScript** para type safety
-- **Tailwind CSS** con variables CSS
-- **shadcn/ui** para componentes
-- **Recharts** para gráficas interactivas
-- **jsPDF** para generación de reportes PDF
-- **Work Sans** como tipografía principal
+### Modelos Matemáticos Disponibles
 
-## 📱 Diseño Mobile-First
+| Modelo | Descripción | Método de Solución |
+|--------|-------------|-------------------|
+| **SDM** | Modelo de 1 Diodo (Single Diode Model) | Newton-Raphson iterativo |
+| **DDM** | Modelo de 2 Diodos (Double Diode Model) | Newton-Raphson con A1=1, A2=2 |
+| **TDM** | Modelo de 3 Diodos (Triple Diode Model) | Newton-Raphson con A1=1, A2=1.2, A3=2.5 |
+| **Lambert W** | Solución analítica explícita | Barry Analytical Expansion |
 
-### Móvil (< 768px)
+### Funcionalidades
 
-- Navegación por tabs: **Parámetros | Gráfica | Resultados**
-- Formulario con categorías colapsables
-- Botón de simulación sticky
-
-### Desktop (> 768px)
-
-- Layout de 3 columnas con paneles sticky
-
-## 📄 Exportación de Reportes
-
-- **CSV**: Datos tabulados de las curvas
-- **Excel**: Formato .xlsx con los 200 puntos de simulación
-- **PDF**: Reporte profesional con:
-  - Encabezado institucional SENA
-  - Información del módulo
-  - Gráfica de las curvas I-V y P-V
-  - Resultados principales (Pmax, FF, Eficiencia, Error)
-  - Punto de Máxima Potencia (MPP)
-  - Tabla de parámetros de entrada
-  - Parámetros calculados
-
-## 📁 Estructura Atomic Design
-
-```
-src/components/
-├── ui/              # shadcn/ui (Button, Input, Card, Select, Tabs, Badge)
-├── atoms/           # Componentes básicos (IconWrapper)
-├── molecules/       # Combinaciones (InputField, StatCard, ModuleSelector)
-├── organisms/       # Secciones (Header, ParameterForm, IVChart, ResultsPanel)
-└── templates/       # Layout de página (SimulatorTemplate)
-```
+- ✅ Selección de modelo matemático
+- ✅ Corrección por temperatura de operación (coeficientes α y β)
+- ✅ Corrección por nivel de irradiancia solar
+- ✅ Cálculo del punto de máxima potencia (MPP)
+- ✅ Cálculo de Fill Factor y eficiencia
+- ✅ Comparación con valores del fabricante
+- ✅ Exportación a CSV, Excel y PDF
+- ✅ Diseño responsivo (desktop y móvil)
+- ✅ Módulos predefinidos de paneles comerciales
 
 ## 🛠️ Instalación
 
 ```bash
-cd curvas-iv-web
+# Clonar o descomprimir el proyecto
+cd simulador-curvas-iv-web-main
+
+# Instalar dependencias
 npm install
+
+# Ejecutar en modo desarrollo
 npm run dev
+
+# Construir para producción
+npm run build
 ```
 
-Abrir http://localhost:3000
+## 📊 Parámetros de Entrada
 
-## 📊 Categorías de Parámetros
+### Parámetros Eléctricos (STC)
+| Parámetro | Símbolo | Unidad | Descripción |
+|-----------|---------|--------|-------------|
+| Isc | Isc | A | Corriente de cortocircuito |
+| Voc | Voc | V | Voltaje de circuito abierto |
+| Vm | Vm | V | Voltaje en MPP (fabricante) |
+| Im | Im | A | Corriente en MPP (fabricante) |
+| Pmax | Pmax | W | Potencia máxima del fabricante |
 
-| Categoría        | Descripción                              |
-| ---------------- | ---------------------------------------- |
-| ⚡ **Eléctrico** | Isc, Voc, Pmax - datos del fabricante    |
-| ☀️ **Ambiente**  | Gop (irradiancia), Top (temperatura), αi |
-| 📐 **Físico**    | Área celda, Ns (serie), Np (paralelo)    |
-| 🔬 **Modelo**    | Factor n, Rs (serie), Rsh (shunt)        |
+### Coeficientes de Temperatura
+| Parámetro | Símbolo | Unidad | Descripción |
+|-----------|---------|--------|-------------|
+| Alpha | αi | %/°C | Coeficiente de temperatura de Isc |
+| Beta | βv | V/°C | Coeficiente de temperatura de Voc |
 
-## 🔬 Método de Simulación
+### Parámetros Físicos
+| Parámetro | Símbolo | Unidad | Descripción |
+|-----------|---------|--------|-------------|
+| Ns | Ns | - | Número de celdas en serie |
+| Np | Np | - | Número de celdas en paralelo |
+| Acelda | A | m² | Área de una celda individual |
 
-Barry Analytical Expansion con modelo de un solo diodo:
+### Parámetros del Modelo
+| Parámetro | Símbolo | Unidad | Descripción |
+|-----------|---------|--------|-------------|
+| n | n | - | Factor de idealidad del diodo |
+| Rs | Rs | Ω | Resistencia serie |
+| Rsh | Rsh | Ω | Resistencia shunt (paralelo) |
 
-- Corriente fotogenerada (Iph)
-- Corriente de saturación inversa (I0)
-- Resistencia serie (Rs) y shunt (Rsh)
-- Factor de idealidad (n)
-- Corrección por temperatura e irradiancia
+### Condiciones de Operación
+| Parámetro | Símbolo | Unidad | Descripción |
+|-----------|---------|--------|-------------|
+| Gop | G | W/m² | Irradiancia de operación |
+| Top | T | °C | Temperatura de operación |
 
-## 📝 Créditos
+## 📚 Referencias Bibliográficas (APA 7)
 
-**Autor:** Mauricio Alexander Vargas Rodríguez  
-**Institución:** Centro de Electricidad, Electrónica y Telecomunicaciones (CEET)  
-**Organización:** Servicio Nacional de Aprendizaje - SENA
+### Modelos de Circuito Equivalente
+Olayiwola, T. N., Hyun, S. H., & Choi, S. J. (2024). Photovoltaic modeling: A comprehensive analysis of the I–V characteristic curve. *Sustainability, 16*(1), 432. https://doi.org/10.3390/su16010432
 
----
+### Identificación de Parámetros
+Abbassi, A., Dami, M. A., & Jemli, M. (2017). Parameters identification of photovoltaic modules based on numerical approach for the single-diode model. *IEEE Xplore*. https://doi.org/10.1109/GECS.2017.8066216
 
-© 2026 - Todos los derechos reservados
+### Función W de Lambert
+Barry, D. A., Parlange, J. Y., Li, L., Prommer, H., Cunningham, C. J., & Stagnitti, F. (2000). Analytical approximations for real values of the Lambert W-function. *Mathematics and Computers in Simulation, 53*(1-2), 95-103. https://doi.org/10.1016/S0378-4754(00)00172-5
+
+## 🔧 Tecnologías Utilizadas
+
+- **Framework:** Next.js 15 (App Router)
+- **UI:** React 19, Tailwind CSS, shadcn/ui
+- **Gráficas:** Recharts
+- **PDF:** jsPDF
+- **Excel:** SheetJS (xlsx)
+- **TypeScript:** Para tipado estático
+
+## 📱 Capturas de Pantalla
+
+### Versión Desktop
+- Panel de parámetros a la izquierda
+- Gráfica I-V/P-V en el centro
+- Resultados a la derecha
+
+### Versión Móvil
+- Navegación por tabs
+- Gráfica optimizada con leyenda debajo
+- Etiquetas de ejes alineadas
+
+## 👤 Autor
+
+**Mauricio Alexander Vargas Rodríguez**  
+Laboratorio de Ensayos para Paneles Solares (LEPS)  
+Centro de Electricidad, Electrónica y Telecomunicaciones  
+Servicio Nacional de Aprendizaje - SENA  
+Bogotá, Colombia
+
+## 📄 Licencia
+
+Derechos reservados © 2024-2026  
+Este software es de uso interno del SENA-CEET para fines educativos y de investigación.
+
+## 📝 Changelog
+
+### v2.2 (Enero 2026)
+- ✨ Implementación de 4 modelos matemáticos (SDM, DDM, TDM, Lambert W)
+- ✨ Selector de modelo matemático en la interfaz
+- ✨ Nuevos parámetros: Vm, Im, βv (coeficiente de temperatura Voc)
+- 🔧 Corrección de gráfica móvil (leyenda debajo, etiquetas alineadas)
+- 📄 Actualización del informe PDF con modelo seleccionado
+- 📚 Inclusión de referencias APA en el footer y PDF
+
+### v2.1 (Diciembre 2025)
+- Versión inicial web con modelo de un diodo
+- Exportación a CSV, Excel y PDF

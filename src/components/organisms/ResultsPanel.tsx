@@ -203,6 +203,14 @@ export function ResultsPanel({ results, params }: ResultsPanelProps) {
           </div>
         </div>
 
+        {/* Modelo matemático */}
+        <div className="flex items-center justify-between p-2 rounded-lg bg-sena-yellow/10 border border-sena-yellow/20">
+          <span className="text-[10px] md:text-xs text-muted-foreground">Modelo:</span>
+          <Badge variant="secondary" className="text-[10px] md:text-xs bg-sena-yellow/20 text-sena-yellow border-sena-yellow/30">
+            {results.modelName}
+          </Badge>
+        </div>
+
         {/* Parametros calculados */}
         <div className="p-3 bg-muted/30 rounded-lg">
           <p className="text-xs font-medium text-muted-foreground mb-2">
