@@ -676,10 +676,9 @@ export async function generatePDFReport({
   // =====================================================================
   doc.addPage();
   currentPage = 4;
-  y = 25;
 
   // Header de página 4
-  drawHeader(4);
+  y = drawHeader(4) + 15;
 
   doc.setFont("Roboto", "bold");
   doc.setFontSize(14);

@@ -159,7 +159,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
           {/* Contenedor de la gráfica - altura controlada */}
           <div className="flex-1 min-h-[180px] md:min-h-[280px] relative">
             {/* Etiquetas de ejes - misma distancia simétrica */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10">
+            <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-4 flex justify-center">
               <span
                 className="text-[9px] md:text-[10px] font-medium whitespace-nowrap"
                 style={{
@@ -171,7 +171,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                 I (A)
               </span>
             </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10">
+            <div className="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-4 flex justify-center">
               <span
                 className="text-[9px] md:text-[10px] font-medium whitespace-nowrap"
                 style={{
@@ -183,14 +183,14 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
               </span>
             </div>
 
-            <div className="h-full pl-4 pr-4">
+            <div className="h-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart
                   data={chartData}
                   margin={{
-                    top: 8,
-                    right: 35,
-                    left: 0,
+                    top: 10,
+                    right: 15, // Márgenes reducidos y simétricos
+                    left: 15,
                     bottom: 20,
                   }}
                 >
@@ -219,7 +219,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     stroke="#ef4444"
                     tick={{ fill: "#ef4444", fontSize: 9 }}
                     tickFormatter={(v) => v.toFixed(1)}
-                    width={32}
+                    width={30}
                   />
 
                   <YAxis
@@ -228,7 +228,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     stroke="#39a900"
                     tick={{ fill: "#39a900", fontSize: 9 }}
                     tickFormatter={(v) => v.toFixed(0)}
-                    width={35}
+                    width={30}
                   />
 
                   <Tooltip content={<CustomTooltip />} />
@@ -315,7 +315,8 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(function IVChart(
                     x={params.voc}
                     y={0}
                     r={4}
-                    fill="#00304d"
+                    fill="#2563eb" // Azul más brillante/visible
+                    stroke="#2563eb"
                     isFront={true}
                   />
                 </ComposedChart>

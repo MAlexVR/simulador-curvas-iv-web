@@ -165,15 +165,28 @@ export function drawIVChart(
   doc.circle(mppX, mppY_I, 1.2, "F");
   doc.circle(mppX, mppY_P, 1.2, "F");
 
-  // Isc Point (0, Isc)
+  // Isc Point (0, Isc) - Triangle
   const isc_Y = mapY1(params.isc);
   doc.setFillColor(COLORS.ivCurve[0], COLORS.ivCurve[1], COLORS.ivCurve[2]);
-  doc.circle(graphX, isc_Y, 1.2, "F");
+  doc.triangle(
+    graphX,
+    isc_Y - 1.5,
+    graphX - 1.5,
+    isc_Y + 1.5,
+    graphX + 1.5,
+    isc_Y + 1.5,
+    "F",
+  );
+  doc.setFontSize(8);
+  doc.setTextColor(COLORS.ivCurve[0], COLORS.ivCurve[1], COLORS.ivCurve[2]);
+  doc.text("Isc", graphX + 2, isc_Y);
 
-  // Voc Point (Voc, 0)
+  // Voc Point (Voc, 0) - Square
   const voc_X = mapX(params.voc);
-  doc.setFillColor(0, 48, 77); // Navy blue like the web interface
-  doc.circle(voc_X, bottomY, 1.2, "F");
+  doc.setFillColor(0, 48, 77); // Navy blue
+  doc.rect(voc_X - 1.2, bottomY - 2.4, 2.4, 2.4, "F");
+  doc.setTextColor(0, 48, 77);
+  doc.text("Voc", voc_X - 1, bottomY - 3);
 
   // 8. Legend - DEBAJO del gráfico, centrada
   const legendY = bottomY + 14;
