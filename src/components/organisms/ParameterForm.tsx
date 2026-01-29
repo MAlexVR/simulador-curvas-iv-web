@@ -207,7 +207,7 @@ export function ParameterForm({
             {params.modelo === "tdm" &&
               "Tres diodos (A1=1, A2=1.2, A3=2.5). Máxima precisión teórica."}
             {params.modelo === "lambert" &&
-              "Solución explícita con función W de Lambert. Rápido y estable."}
+              "Solución analítica explícita Barry Analytical Expansion. Rápido y estable."}
           </p>
         </div>
 
