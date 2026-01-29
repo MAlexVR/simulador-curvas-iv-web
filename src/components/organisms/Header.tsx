@@ -4,6 +4,7 @@ import { Sun, Zap, Info, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { UserManualModal } from "@/components/molecules/UserManualModal";
 
 interface HeaderProps {
   onAboutClick?: () => void;
@@ -42,6 +43,7 @@ export function Header({ onAboutClick }: HeaderProps) {
           <Badge className="text-xs bg-sena-green/20 text-sena-green border-sena-green/30">
             v2.3
           </Badge>
+          <UserManualModal />
           <Button variant="ghost" size="sm" onClick={handleAboutClick}>
             <Info className="w-4 h-4 mr-1" />
             Acerca de

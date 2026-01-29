@@ -238,31 +238,40 @@ export function ParameterForm({
                   <path d="M12 17h.01" />
                 </svg>
               </div>
-              <div className="absolute left-1/2 bottom-full mb-2 -translate-x-1/2 hidden group-hover:block w-64 p-2 bg-popover text-popover-foreground text-[10px] rounded-md border shadow-md z-50">
-                <p className="font-semibold mb-1">Descripción de parámetros:</p>
-                <ul className="space-y-0.5 list-disc pl-3">
-                  <li>
-                    <strong>Isc:</strong> Corriente de cortocircuito
-                  </li>
-                  <li>
-                    <strong>Voc:</strong> Voltaje de circuito abierto
-                  </li>
-                  <li>
-                    <strong>Vm/Im:</strong> Voltaje/Corriente en MPP
-                  </li>
-                  <li>
-                    <strong>n:</strong> Factor de idealidad del diodo
-                  </li>
-                  <li>
-                    <strong>Rs:</strong> Resistencia serie
-                  </li>
-                  <li>
-                    <strong>Rsh:</strong> Resistencia shunt (paralelo)
-                  </li>
-                  <li>
-                    <strong>Alpha/Beta:</strong> Coef. temperatura
-                  </li>
-                </ul>
+              <div className="absolute left-1/2 bottom-full mb-2 -translate-x-1/2 hidden group-hover:block w-80 p-3 bg-popover text-popover-foreground text-[10px] rounded-md border shadow-md z-50">
+                <p className="font-semibold mb-2">Descripción de parámetros:</p>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                  <span className="font-bold">Isc:</span>{" "}
+                  <span>Corriente de cortocircuito</span>
+                  <span className="font-bold">Voc:</span>{" "}
+                  <span>Voltaje de circuito abierto</span>
+                  <span className="font-bold">Vm:</span>{" "}
+                  <span>Voltaje en MPP (fabricante)</span>
+                  <span className="font-bold">Im:</span>{" "}
+                  <span>Corriente en MPP (fabricante)</span>
+                  <span className="font-bold">Pmax:</span>{" "}
+                  <span>Potencia máxima (fabricante)</span>
+                  <span className="font-bold">Ns:</span>{" "}
+                  <span>Celdas en serie</span>
+                  <span className="font-bold">Np:</span>{" "}
+                  <span>Celdas en paralelo</span>
+                  <span className="font-bold">n:</span>{" "}
+                  <span>Factor de idealidad</span>
+                  <span className="font-bold">Rs:</span>{" "}
+                  <span>Resistencia serie</span>
+                  <span className="font-bold">Rsh:</span>{" "}
+                  <span>Resistencia paralelo</span>
+                  <span className="font-bold">α (Alpha):</span>{" "}
+                  <span>Coef. temp. de Isc</span>
+                  <span className="font-bold">β (Beta):</span>{" "}
+                  <span>Coef. temp. de Voc</span>
+                  <span className="font-bold">Gop:</span>{" "}
+                  <span>Irradiancia operativa</span>
+                  <span className="font-bold">Top:</span>{" "}
+                  <span>Temp. operativa de celda</span>
+                  <span className="font-bold">Acelda:</span>{" "}
+                  <span>Área de la celda</span>
+                </div>
               </div>
             </div>
           </div>
