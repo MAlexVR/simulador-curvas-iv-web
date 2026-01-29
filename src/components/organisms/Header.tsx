@@ -69,15 +69,16 @@ export function Header({ onAboutClick }: HeaderProps) {
               triggerVariant="ghost"
               triggerClassName="w-full justify-start"
             >
-              <HelpCircle className="w-4 h-4 mr-2" />
+              <HelpCircle className="w-4 h-4" />
               Manual de Usuario
             </UserManualModal>
             <Button
               variant="ghost"
-              className="w-full justify-start"
+              size="sm"
+              className="w-full justify-start gap-2"
               onClick={handleAboutClick}
             >
-              <Info className="w-4 h-4 mr-2" />
+              <Info className="w-4 h-4" />
               Acerca de
             </Button>
             <div className="flex items-center justify-between pt-2 border-t">
