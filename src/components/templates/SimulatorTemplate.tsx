@@ -317,18 +317,42 @@ export function SimulatorTemplate() {
                 <p>
                   Olayiwola, T. N., Hyun, S. H., & Choi, S. J. (2024).
                   Photovoltaic modeling: A comprehensive analysis of the I–V
-                  characteristic curve. <em>Sustainability, 16</em>(1), 432.
+                  characteristic curve. <em>Sustainability, 16</em>(1), 432.{" "}
+                  <a
+                    href="https://doi.org/10.3390/su16010432"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sena-green hover:underline"
+                  >
+                    https://doi.org/10.3390/su16010432
+                  </a>
                 </p>
                 <p>
                   Abbassi, A., Dami, M. A., & Jemli, M. (2017). Parameters
                   identification of photovoltaic modules based on numerical
-                  approach. <em>IEEE Xplore</em>.
+                  approach. <em>IEEE Xplore</em>.{" "}
+                  <a
+                    href="https://doi.org/10.1109/GECS.2017.8066216"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sena-green hover:underline"
+                  >
+                    https://doi.org/10.1109/GECS.2017.8066216
+                  </a>
                 </p>
                 <p>
                   Barry, D. A., et al. (2000). Analytical approximations for
                   real values of the Lambert W-function.{" "}
                   <em>Mathematics and Computers in Simulation, 53</em>(1-2),
-                  95-103.
+                  95-103.{" "}
+                  <a
+                    href="https://doi.org/10.1016/S0378-4754(00)00172-5"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sena-green hover:underline"
+                  >
+                    https://doi.org/10.1016/S0378-4754(00)00172-5
+                  </a>
                 </p>
               </div>
             </div>
