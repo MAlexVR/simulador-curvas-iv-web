@@ -99,8 +99,9 @@ export function UserManualModal({
             </h3>
             <p className="text-muted-foreground ml-6">
               Seleccione el <strong>Modelo Matemático</strong> deseado en el
-              selector superior (ej. SDM, DDM, Barry Analytical). Luego presione
-              el botón verde <strong>"Ejecutar Simulación"</strong>.
+              selector superior (ej. SDM, DDM, TDM, Barry Analytical Expansion).
+              Luego presione el botón verde{" "}
+              <strong>"Ejecutar Simulación"</strong>.
             </p>
           </section>
 
@@ -141,8 +142,8 @@ export function UserManualModal({
                 gráficas vectoriales listas para imprimir.
               </li>
               <li>
-                <strong>CSV:</strong> Descarga los puntos (V, I, P) para
-                análisis en Excel o MATLAB.
+                <strong>CSV o Excel:</strong> Descarga los puntos (V, I, P) para
+                análisis en MATLAB, Python o Excel.
               </li>
             </ul>
           </section>

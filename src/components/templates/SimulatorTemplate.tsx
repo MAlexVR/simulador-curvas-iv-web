@@ -359,8 +359,8 @@ export function SimulatorTemplate() {
             <div>
               <h3 className="font-semibold mb-2 text-sena-green">Créditos</h3>
               <p className="text-xs md:text-sm text-muted-foreground">
-                <strong className="text-foreground">Autor:</strong> Mauricio
-                Alexander Vargas Rodríguez
+                <strong className="text-foreground">Autor:</strong> Ing.
+                Mauricio Alexander Vargas Rodríguez, M.Sc., MBA Esp. PM
               </p>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
                 <strong className="text-foreground">Institución:</strong> Centro
