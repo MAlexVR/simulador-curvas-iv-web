@@ -54,11 +54,21 @@ function CustomTooltip({
 export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
   function IVChart({ results, params }, ref) {
     const chartRef = useRef<HTMLDivElement>(null);
+    const chartContainerRef = useRef<HTMLDivElement>(null);
     const [showLabels, setShowLabels] = useState(true);
-    const [mounted, setMounted] = useState(false);
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const chartData = useMemo(() => toChartData(results), [results]);
 
-    useEffect(() => { setMounted(true); }, []);
+    useEffect(() => {
+      const el = chartContainerRef.current;
+      if (!el) return;
+      const observer = new ResizeObserver(entries => {
+        const { width, height } = entries[0].contentRect;
+        setContainerSize({ width, height });
+      });
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, []);
 
     // Exponer el elemento del chart para captura de PDF
     useImperativeHandle(ref, () => ({
@@ -130,8 +140,8 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
         <CardContent className="flex-1 p-2 md:p-4 pt-0 min-h-0">
           <div ref={chartRef} className="h-full flex flex-col bg-card/50 rounded-lg p-2">
             {/* Contenedor de la gráfica con altura fija */}
-            <div className="flex-1 min-h-[250px] max-h-[400px] md:min-h-[300px] md:max-h-[450px] min-w-0">
-              {mounted && <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={100}>
+            <div ref={chartContainerRef} className="h-[300px] md:h-[400px] min-w-0">
+              {containerSize.width > 0 && containerSize.height > 0 && <ResponsiveContainer width={containerSize.width} height={containerSize.height} minWidth={0}>
                 <ComposedChart
                   data={chartData}
                   margin={{ top: 10, right: 10, left: 5, bottom: 0 }}
@@ -198,7 +208,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
                   />
 
                   {/* Líneas de referencia MPP */}
-                  {showLabels && (
+                  {showLabels && isFinite(results.vmpp) && isFinite(results.impp) && (
                     <>
                       <ReferenceLine
                         yAxisId="current"
@@ -218,25 +228,29 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
                   )}
 
                   {/* Puntos clave */}
-                  <ReferenceDot
-                    yAxisId="current"
-                    x={results.vmpp}
-                    y={results.impp}
-                    r={5}
-                    fill="#fdc300"
-                    stroke="#fdc300"
-                    strokeWidth={2}
-                  />
-                  
-                  <ReferenceDot
-                    yAxisId="power"
-                    x={results.vmpp}
-                    y={results.pmaxCalc}
-                    r={5}
-                    fill="#39a900"
-                    stroke="#39a900"
-                    strokeWidth={2}
-                  />
+                  {isFinite(results.vmpp) && isFinite(results.impp) && (
+                    <ReferenceDot
+                      yAxisId="current"
+                      x={results.vmpp}
+                      y={results.impp}
+                      r={5}
+                      fill="#fdc300"
+                      stroke="#fdc300"
+                      strokeWidth={2}
+                    />
+                  )}
+
+                  {isFinite(results.vmpp) && isFinite(results.pmaxCalc) && (
+                    <ReferenceDot
+                      yAxisId="power"
+                      x={results.vmpp}
+                      y={results.pmaxCalc}
+                      r={5}
+                      fill="#39a900"
+                      stroke="#39a900"
+                      strokeWidth={2}
+                    />
+                  )}
                   
                   <ReferenceDot
                     yAxisId="current"

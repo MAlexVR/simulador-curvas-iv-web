@@ -23,7 +23,7 @@ async function loadFontAsBase64(url: string): Promise<string> {
 /**
  * Carga y registra las fuentes personalizadas en la instancia de jsPDF
  */
-export async function loadFonts(doc: jsPDF): Promise<void> {
+export async function loadFonts(doc: jsPDF): Promise<boolean> {
   try {
     const [fontRegular, fontBold] = await Promise.all([
       loadFontAsBase64("/fonts/Roboto-Regular.ttf"),
@@ -37,11 +37,14 @@ export async function loadFonts(doc: jsPDF): Promise<void> {
     // Registrar Roboto-Bold
     doc.addFileToVFS("Roboto-Bold.ttf", fontBold);
     doc.addFont("Roboto-Bold.ttf", "Roboto", "bold");
+
+    return true;
   } catch (error) {
     console.warn(
       "Error cargando fuentes personalizadas, usando fallback:",
       error,
     );
     // No lanzamos error para permitir que el PDF se genere con fuentes default si falla
+    return false;
   }
 }

@@ -68,6 +68,7 @@ export function runSimulation(params: ModuleParams, model: SimulationModel = 'SD
   if (params.rsh <= 0) throw new Error("Rsh debe ser > 0");
   if (params.n <= 0) throw new Error("n debe ser > 0");
   if (params.acelda <= 0) throw new Error("Área de celda debe ser > 0");
+  if (params.gop <= 0) throw new Error("La irradiancia (Gop) debe ser mayor a 0");
 
   const { I_ph, I_0, Vt_op } = computeBaseParams(params, params.gop, params.top);
 
@@ -112,8 +113,12 @@ export function runSimulation(params: ModuleParams, model: SimulationModel = 'SD
 
 // Estima el Voc real a condiciones de operación (para dimensionar el sweep de voltaje)
 // Usa la aproximación analítica del circuito equivalente: V_oc ≈ Ns*Vt*ln(Iph/I0 + 1)
-function estimateActualVoc(I_ph: number, I_0: number, N_s: number, Vt: number): number {
-  if (I_0 <= 0 || I_ph <= 0) return 0;
+function estimateActualVoc(I_ph: number, I_0: number, N_s: number, Vt: number, nominalVoc?: number): number {
+  if (I_0 <= 0 || I_ph <= 0) {
+    const fallback = nominalVoc != null ? nominalVoc * 1.1 : 0;
+    console.warn(`estimateActualVoc: parámetros inválidos (I_ph=${I_ph}, I_0=${I_0}), usando fallback=${fallback}`);
+    return fallback;
+  }
   return N_s * Vt * Math.log(I_ph / I_0 + 1);
 }
 
@@ -137,7 +142,7 @@ export function runMultiCondition(
   // Calcular el Voc real de cada condición y usar el máximo como límite del sweep
   // Esto evita que curvas a baja temperatura (Voc real > Voc STC) queden cortadas
   const actualVocs = baseParamsList.map(({ I_ph, I_0, Vt_op }) =>
-    estimateActualVoc(I_ph, I_0, params.ns, Vt_op)
+    estimateActualVoc(I_ph, I_0, params.ns, Vt_op, params.voc)
   );
   const sweepVoc = Math.max(...actualVocs, params.voc) * 1.02; // 2% de margen
 

@@ -107,7 +107,10 @@ export async function generatePDFReport({
   });
 
   // Cargar fuentes personalizadas
-  await loadFonts(doc);
+  const fontsLoaded = await loadFonts(doc);
+  if (!fontsLoaded) {
+    console.warn("pdf-generator: fuentes personalizadas no disponibles, el layout del PDF puede verse afectado");
+  }
   doc.setFont("Roboto");
 
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -839,14 +842,33 @@ export async function generatePDFReport({
   setColor(COLORS.black);
 
   const refTexts = [
-    "Olayiwola, T. N., Hyun, S. H., & Choi, S. J. (2024). Photovoltaic modeling: A comprehensive analysis of the I–V characteristic curve. Sustainability, 16(1), 432. https://doi.org/10.3390/su16010432",
-    "Abbassi, A., Dami, M. A., & Jemli, M. (2017). Parameters identification of photovoltaic modules based on numerical approach for the single-diode model. In 2017 International Conference on Green Energy Conversion Systems (GECS) (pp. 1-6). IEEE. https://doi.org/10.1109/GECS.2017.8066216",
-    "Barry, D. A., Parlange, J. Y., Li, L., Prommer, H., Cunningham, C. J., & Stagnitti, F. (2000). Analytical approximations for real values of the Lambert W-function. Mathematics and Computers in Simulation, 53(1-2), 95-103. https://doi.org/10.1016/S0378-4754(00)00172-5",
+    "Barry, D. A., Parlange, J.-Y., Li, L., Prommer, H., Cunningham, C. J., & Stagnitti, F. (2000). Analytical approximations for real values of the Lambert W-function. Mathematics and Computers in Simulation, 53(1-2), 95-103. https://doi.org/10.1016/S0378-4754(00)00172-5",
+    "Barry, D. A., Parlange, J.-Y., Li, L., Prommer, H., Cunningham, C. J., & Stagnitti, F. (2002). Erratum to \"Analytical approximations for real values of the Lambert W-function\" [Mathematics and Computers in Simulation 53 (2000) 95-103]. Mathematics and Computers in Simulation, 59(6), 543. https://doi.org/10.1016/S0378-4754(02)00051-4",
+    "Olayiwola, T. N., Hyun, S.-H., & Choi, S.-J. (2024). Photovoltaic modeling: A comprehensive analysis of the I-V characteristic curve. Sustainability, 16(1), 432. https://doi.org/10.3390/su16010432",
+    "Rahmani, L., Seddaoui, N., Kessala, A., & Chouder, A. (2011). Parameters extraction of photovoltaic module at reference and real conditions. In Proceedings of the 2011 International Conference on Communications, Computing and Control Applications (CCCA) (pp. 1-6). IEEE. https://ieeexplore.ieee.org/document/6125617",
+    "Abbassi, A., Dami, M. A., & Jemli, M. (2017). Parameters identification of photovoltaic modules based on numerical approach for the single-diode model. In Proceedings of the 2017 IEEE International Conference on Sciences and Techniques of Automatic Control and Computer Engineering (STA) (pp. 1-7). IEEE.",
+    "Song, Z., Fang, K., Sun, X., Liang, Y., Lin, W., Xu, C., Huang, G., & Yu, F. (2021). An effective method to accurately extract the parameters of single diode model of solar cells. Nanomaterials, 11(10), 2615. https://doi.org/10.3390/nano11102615",
+    "Vais, R. I., Sahay, K., Chiranjeevi, T., Devarapalli, R., & Knypinski, L. (2023). Parameter extraction of solar photovoltaic modules using a novel bio-inspired swarm intelligence optimisation algorithm. Sustainability, 15(10), 8407. https://doi.org/10.3390/su15108407",
+    "Mahto, R., & John, R. (2021). Modeling of photovoltaic module. In A. M. Elseman (Ed.), Solar cells - Theory, materials and recent advances. IntechOpen. https://doi.org/10.5772/intechopen.97082",
+    "Bennagi, A., AlHousrya, O., Cotfas, D. T., & Cotfas, P. A. (2025). Parameter extraction of photovoltaic cells and panels using a PID-based metaheuristic algorithm. Applied Sciences, 15(13), 7403. https://doi.org/10.3390/app15137403",
   ];
 
+  const maxBibY = pageHeight - 22;
+
   refTexts.forEach((refText, index) => {
-    // Sangría francesa: primera línea sin sangría, resto con sangría
     const lines = doc.splitTextToSize(refText, contentWidth - 10);
+    // Verificar si cabe en la página actual; si no, nueva página
+    const blockHeight = lines.length * 5 + 6;
+    if (bibY + blockHeight > maxBibY) {
+      drawFooter();
+      doc.addPage();
+      currentPage++;
+      bibY = drawHeader(currentPage) + 15;
+      doc.setFontSize(10);
+      doc.setFont("Roboto", "normal");
+      setColor(COLORS.black);
+    }
+    // Sangría francesa: primera línea sin sangría, resto con sangría
     lines.forEach((line: string, lineIndex: number) => {
       const xPos = lineIndex === 0 ? marginLeft : marginLeft + 10;
       doc.text(line, xPos, bibY);

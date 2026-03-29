@@ -58,7 +58,8 @@ export function sdmLambert(input: PVModelInput): PVCurveOutput {
       const I = (iph + i0 - V / R_sh) / denom - (N_s * Vt_op / R_s) * W;
 
       return isFinite(I) ? I : Math.max(0, iph - V / R_sh);
-    } catch {
+    } catch (err) {
+      console.warn(`sdmLambert: lambertW0 falló en V=${V} (${err instanceof Error ? err.message : err}), usando fallback analítico`);
       return Math.max(0, iph - V / R_sh); // fallback analítico si W falla
     }
   };

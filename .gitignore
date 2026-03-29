@@ -31,3 +31,7 @@ yarn-error.log*
 next-env.d.ts
 nul
 nul
+
+# Project
+.atl
+docs

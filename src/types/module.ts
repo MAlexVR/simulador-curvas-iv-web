@@ -78,7 +78,7 @@ export interface PresetModule {
 }
 
 export function presetToParams(preset: PresetModule): ModuleParams {
-  return {
+  const params = {
     marca: preset.Marca,
     referencia: preset.Referencia,
     isc: parseFloat(preset.Isc),
@@ -97,4 +97,14 @@ export function presetToParams(preset: PresetModule): ModuleParams {
     imp: preset.Imp ? parseFloat(preset.Imp) : undefined,
     tnoct: preset.Tnoct ? parseFloat(preset.Tnoct) : undefined,
   };
+
+  const criticalFields: (keyof typeof params)[] = ['isc', 'voc', 'pmax'];
+  const optionalCritical: (keyof typeof params)[] = ['vmp', 'imp'];
+  const allCritical = [...criticalFields, ...optionalCritical.filter(f => params[f] !== undefined)];
+  const invalid = allCritical.filter(f => !isFinite(params[f] as number));
+  if (invalid.length > 0) {
+    throw new Error(`presetToParams: campos críticos con valor no numérico: ${invalid.join(', ')} en módulo "${preset.Referencia}"`);
+  }
+
+  return params;
 }

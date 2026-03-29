@@ -190,6 +190,19 @@ El simulador incluye un módulo de degradación de paneles con 5 defectos físic
 
 ## Changelog
 
+### v2.3.1 (2026)
+- **Fix definitivo Recharts warnings**: reemplazado el `mounted` guard por `ResizeObserver` en `IVChart` y `MultiConditionChart`. El observer pasa dimensiones reales en píxeles directamente a `ResponsiveContainer`, eliminando el estado inicial `-1` de Recharts. Root cause: los layouts mobile (`md:hidden`) y desktop (`hidden md:block`) están ambos en el DOM; el container oculto medía `0/0` causando 8 advertencias por simulación.
+- **Referencias PDF sincronizadas**: bibliografía del informe PDF actualizada de 3 a 9 referencias (APA 7, sangría francesa), idénticas al modal de referencias. Agrega control de desbordamiento de página.
+- **Judgment Day bugfixes** (revisión adversarial con 2 jueces independientes, 2 rondas):
+  - `estimateActualVoc`: retorna `Voc × 1.1` en lugar de `0` cuando I₀/Iph son inválidos (oversweep, evita curvas truncadas)
+  - `runSimulation`: lanza error explícito si Gop ≤ 0 (antes: división por cero silenciosa en eficiencia)
+  - `lambertW0`: registra `console.warn` antes del fallback de convergencia
+  - `hexToRgb` en pdf-charts: valida formato hex con regex antes de parsear
+  - `loadFonts`: retorna `boolean` de éxito; pdf-generator registra advertencia si las fuentes no cargan
+  - `presetToParams`: valida que los campos críticos (Isc, Voc, Pmax) sean números finitos antes de aceptar el preset
+  - `IVChart`: `ReferenceDot`/`ReferenceLine` del MPP envueltos en guard `isFinite(vmpp) && isFinite(impp)`
+- `.gitignore`: agregados `.atl` y `docs`
+
 ### v2.3.0 (2026)
 - **Informe PDF completamente rediseñado**: formato Carta, fuente Roboto, logos SENA + LEPS con proporciones exactas, dibujo nativo de curvas I-V/P-V y multi-condición en jsPDF (sin html2canvas), estructura de hasta 6 páginas
 - **PDF incluye Multi-G y Multi-T**: el botón PDF en Resultados genera el informe completo con todas las condiciones simuladas

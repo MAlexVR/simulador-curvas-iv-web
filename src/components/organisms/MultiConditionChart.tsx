@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, forwardRef, useImperativeHandle, useState, useEffect } from "react";
+import { useMemo, useRef, forwardRef, useImperativeHandle, useState, useEffect, type RefObject } from "react";
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { MultiConditionResults } from "@/lib/models/types";
 import { ModuleParams } from "@/types/module";
@@ -54,10 +54,28 @@ function MultiConditionChart({ results, params }, ref) {
   const ivPanelRef = useRef<HTMLDivElement>(null);
   const pvPanelRef = useRef<HTMLDivElement>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [ivSize, setIvSize] = useState({ width: 0, height: 0 });
+  const [pvSize, setPvSize] = useState({ width: 0, height: 0 });
   const { mode, curves, labels, colors } = results;
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    const observePanel = (
+      ref: RefObject<HTMLDivElement | null>,
+      setter: (s: { width: number; height: number }) => void
+    ) => {
+      const el = ref.current;
+      if (!el) return () => {};
+      const observer = new ResizeObserver(entries => {
+        const { width, height } = entries[0].contentRect;
+        setter({ width, height });
+      });
+      observer.observe(el);
+      return () => observer.disconnect();
+    };
+    const cleanIv = observePanel(ivPanelRef, setIvSize);
+    const cleanPv = observePanel(pvPanelRef, setPvSize);
+    return () => { cleanIv(); cleanPv(); };
+  }, []);
 
   useImperativeHandle(ref, () => ({
     getChartElement: () => chartContainerRef.current,
@@ -128,8 +146,8 @@ function MultiConditionChart({ results, params }, ref) {
   const IVChart = (
     <div ref={ivPanelRef} className="min-w-0 h-[280px] md:h-[340px]">
       <p className="text-xs font-medium text-muted-foreground mb-1 text-center">{title}</p>
-      {mounted && (
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={100}>
+      {ivSize.width > 0 && ivSize.height > 0 && (
+        <ResponsiveContainer width={ivSize.width} height={ivSize.height} minWidth={0}>
           <ComposedChart data={chartData} margin={{ top: 5, right: 10, left: 5, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis dataKey="voltage" type="number" domain={["dataMin", "dataMax"]} stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(0)} />
@@ -148,8 +166,8 @@ function MultiConditionChart({ results, params }, ref) {
   const PVChart = (
     <div ref={pvPanelRef} className="min-w-0 h-[280px] md:h-[340px]">
       <p className="text-xs font-medium text-muted-foreground mb-1 text-center">{pvTitle}</p>
-      {mounted && (
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={100}>
+      {pvSize.width > 0 && pvSize.height > 0 && (
+        <ResponsiveContainer width={pvSize.width} height={pvSize.height} minWidth={0}>
           <ComposedChart data={pvData} margin={{ top: 5, right: 10, left: 5, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis dataKey="voltage" type="number" domain={["dataMin", "dataMax"]} stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(0)} />
