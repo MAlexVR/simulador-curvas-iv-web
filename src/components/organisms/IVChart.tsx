@@ -39,11 +39,11 @@ function CustomTooltip({
   if (active && payload && payload.length) {
     const data = payload[0]?.payload;
     return (
-      <div className="bg-card/95 backdrop-blur-sm border rounded-lg p-2 md:p-3 shadow-lg text-xs md:text-sm">
-        <p className="text-sena-yellow font-medium mb-1">
+      <div className="bg-white border border-gray-200 rounded-lg p-2 md:p-3 shadow-lg text-xs md:text-sm">
+        <p className="text-amber-600 font-medium mb-1">
           V = {data?.voltage?.toFixed(2)} V
         </p>
-        <p className="text-current-400">I = {data?.current?.toFixed(3)} A</p>
+        <p className="text-red-500">I = {data?.current?.toFixed(3)} A</p>
         <p className="text-sena-green font-medium">P = {data?.power?.toFixed(2)} W</p>
       </div>
     );
@@ -80,7 +80,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
       try {
         const html2canvas = (await import("html2canvas")).default;
         const canvas = await html2canvas(chartRef.current, {
-          backgroundColor: "#020617",
+          backgroundColor: "#ffffff",
           scale: 2,
         });
         const link = document.createElement("a");
@@ -102,10 +102,10 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant={showLabels ? "secondary" : "ghost"}
+                variant="outline"
                 size="sm"
                 onClick={() => setShowLabels(!showLabels)}
-                className="h-8 text-xs"
+                className={`h-8 text-xs ${showLabels ? "border-sena-green/40 text-sena-green bg-sena-green/10 hover:bg-sena-green/15 hover:text-sena-green" : ""}`}
               >
                 {showLabels ? (
                   <Eye className="w-3.5 h-3.5 mr-1" />
@@ -265,7 +265,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
                     x={params.voc}
                     y={0}
                     r={4}
-                    fill="#00304d"
+                    fill="#00324D"
                   />
                 </ComposedChart>
               </ResponsiveContainer>}
@@ -274,21 +274,21 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
             {/* Info panel - siempre visible pero compacto */}
             {showLabels && (
               <div className="flex-shrink-0 mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] md:text-xs">
-                <div className="bg-current-500/10 rounded-lg p-2 text-center">
-                  <p className="text-current-400 font-medium">Isc</p>
-                  <p className="text-foreground font-mono">{params.isc.toFixed(2)} A</p>
+                <div className="bg-red-50 rounded-lg p-2 text-center">
+                  <p className="text-red-500 font-medium">Isc</p>
+                  <p className="text-gray-700 font-mono">{params.isc.toFixed(2)} A</p>
                 </div>
-                <div className="bg-sena-navy/20 rounded-lg p-2 text-center">
-                  <p className="text-sena-cyan font-medium">Voc</p>
+                <div className="bg-sena-blue/10 rounded-lg p-2 text-center">
+                  <p className="text-sena-blue font-medium">Voc</p>
                   <p className="text-foreground font-mono">{params.voc.toFixed(2)} V</p>
                 </div>
-                <div className="bg-sena-yellow/10 rounded-lg p-2 text-center">
-                  <p className="text-sena-yellow font-medium">MPP</p>
-                  <p className="text-foreground font-mono">{results.vmpp.toFixed(1)}V, {results.impp.toFixed(2)}A</p>
+                <div className="bg-amber-50 rounded-lg p-2 text-center">
+                  <p className="text-amber-600 font-medium">MPP</p>
+                  <p className="text-gray-700 font-mono">{results.vmpp.toFixed(1)}V, {results.impp.toFixed(2)}A</p>
                 </div>
-                <div className="bg-sena-green/10 rounded-lg p-2 text-center">
+                <div className="bg-green-50 rounded-lg p-2 text-center">
                   <p className="text-sena-green font-medium">Pmax</p>
-                  <p className="text-foreground font-mono">{results.pmaxCalc.toFixed(1)} W</p>
+                  <p className="text-gray-700 font-mono">{results.pmaxCalc.toFixed(1)} W</p>
                 </div>
               </div>
             )}

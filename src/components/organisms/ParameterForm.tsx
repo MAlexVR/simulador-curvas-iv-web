@@ -208,7 +208,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
             </TabsList>
 
             <TabsContent value="electric" className="mt-4 space-y-3">
-              <p className="text-[10px] text-muted-foreground bg-muted/50 p-2 rounded-md">
+              <p className="text-[10px] text-muted-foreground bg-gray-50 border border-gray-100 p-2 rounded-md">
                 ⚡ Características eléctricas según el fabricante.
               </p>
               <div className="grid grid-cols-2 gap-3">
@@ -280,7 +280,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
             </TabsContent>
 
             <TabsContent value="conditions" className="mt-4 space-y-3">
-              <p className="text-[10px] text-muted-foreground bg-muted/50 p-2 rounded-md">
+              <p className="text-[10px] text-muted-foreground bg-gray-50 border border-gray-100 p-2 rounded-md">
                 ☀️ Irradiancia solar y temperatura de operación.
               </p>
               <div className="flex gap-2 mb-1">
@@ -336,7 +336,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
             </TabsContent>
 
             <TabsContent value="physical" className="mt-4 space-y-3">
-              <p className="text-[10px] text-muted-foreground bg-muted/50 p-2 rounded-md">
+              <p className="text-[10px] text-muted-foreground bg-gray-50 border border-gray-100 p-2 rounded-md">
                 📐 Dimensiones y configuración de celdas.
               </p>
               <InputField
@@ -367,7 +367,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
             </TabsContent>
 
             <TabsContent value="model" className="mt-4 space-y-3">
-              <p className="text-[10px] text-muted-foreground bg-muted/50 p-2 rounded-md">
+              <p className="text-[10px] text-muted-foreground bg-gray-50 border border-gray-100 p-2 rounded-md">
                 🔬 Parámetros del modelo de diodo.
               </p>
               <div className="space-y-1">
@@ -514,7 +514,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
                         ))}
                       </div>
 
-                      <div className="p-2 bg-muted/30 rounded-md space-y-1">
+                      <div className="p-2 bg-gray-50 border border-gray-100 rounded-md space-y-1">
                         <p className="text-[10px] font-medium text-muted-foreground">
                           {defect.parameter}: {defect.levels[defectSeverity].description}
                         </p>

@@ -91,7 +91,7 @@ export function SimulatorTemplate() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header onAboutClick={scrollToAbout} />
 
       {/* Mobile Layout: Tabs */}
@@ -127,7 +127,7 @@ export function SimulatorTemplate() {
 
             <div className="sticky bottom-3 pt-2 space-y-2">
               {/* Chart mode selector */}
-              <div className="flex gap-1 p-1 bg-muted/50 rounded-lg">
+              <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
                 {([['individual', 'Individual'], ['multi-g', 'Multi-G'], ['multi-t', 'Multi-T']] as const).map(([mode, label]) => (
                   <button
                     key={mode}
@@ -136,7 +136,7 @@ export function SimulatorTemplate() {
                     className={`flex-1 py-1 text-[10px] md:text-xs rounded transition-colors ${
                       chartMode === mode
                         ? 'bg-sena-green text-white font-medium shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground'
+                        : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
                     {label}
@@ -213,7 +213,7 @@ export function SimulatorTemplate() {
               <ParameterForm params={params} onChange={setParams} onReset={handleReset} />
 
               {/* Chart mode selector */}
-              <div className="flex gap-1 p-1 bg-muted/50 rounded-lg">
+              <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
                 {([['individual', 'Individual'], ['multi-g', 'Multi-G'], ['multi-t', 'Multi-T']] as const).map(([mode, label]) => (
                   <button
                     key={mode}
@@ -222,7 +222,7 @@ export function SimulatorTemplate() {
                     className={`flex-1 py-1 text-[10px] md:text-xs rounded transition-colors ${
                       chartMode === mode
                         ? 'bg-sena-green text-white font-medium shadow-sm'
-                        : 'text-muted-foreground hover:text-foreground'
+                        : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
                     {label}
@@ -249,13 +249,6 @@ export function SimulatorTemplate() {
                 )}
               </Button>
 
-              <div className="flex justify-center pt-4">
-                <img
-                  src="/logo-centro-formacion.svg"
-                  alt="Centro de Electricidad, Electrónica y Telecomunicaciones - SENA"
-                  className="h-14 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
-                />
-              </div>
             </div>
           </aside>
 
@@ -273,10 +266,10 @@ export function SimulatorTemplate() {
                       <div className="absolute inset-0 bg-sena-green/20 rounded-full blur-2xl animate-pulse-slow" />
                       <Sun className="relative w-20 h-20 text-sena-green/50" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground/80 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
                       Listo para simular
                     </h3>
-                    <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                    <p className="text-sm text-gray-500 max-w-xs mx-auto">
                       Configure los parámetros del módulo y presione
                       <span className="text-sena-green font-medium"> "Ejecutar Simulación" </span>
                       para generar las curvas.
@@ -302,8 +295,8 @@ export function SimulatorTemplate() {
                 ) : (
                   <Card className="glass">
                     <CardContent className="py-12 text-center">
-                      <Zap className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-                      <p className="text-sm text-muted-foreground">
+                      <Zap className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                      <p className="text-sm text-gray-400">
                         Los resultados aparecerán aquí después de la simulación.
                       </p>
                     </CardContent>
@@ -315,27 +308,20 @@ export function SimulatorTemplate() {
         </div>
       </main>
 
-      {/* Footer - Acerca de */}
-      <footer ref={aboutRef} className="border-t bg-muted/30 mt-auto scroll-mt-4">
+      {/* Acerca de */}
+      <section ref={aboutRef} className="border-t bg-white mt-auto scroll-mt-4">
         <div className="container px-4 py-6 md:py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-sm">
-            {/* Col 1: Logo grupo + descripción */}
+            {/* Col 1: descripción */}
             <div>
-              <div className="mb-4">
-                <img
-                  src="/logo-grupo-investigacion.svg"
-                  alt="Grupo de Investigación"
-                  className="h-14 w-auto object-contain"
-                />
-              </div>
               <h3 className="font-semibold mb-2 text-sena-green">
                 ¿Qué es este simulador?
               </h3>
-              <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">
+              <p className="text-gray-500 text-xs md:text-sm leading-relaxed">
                 Esta herramienta permite simular el comportamiento eléctrico de
                 paneles solares fotovoltaicos. Genera las curvas características{" "}
-                <strong className="text-foreground">I-V</strong> (Corriente vs
-                Voltaje) y <strong className="text-foreground">P-V</strong>{" "}
+                <strong className="text-gray-700">I-V</strong> (Corriente vs
+                Voltaje) y <strong className="text-gray-700">P-V</strong>{" "}
                 (Potencia vs Voltaje) utilizando modelos de circuito equivalente
                 con uno, dos o tres diodos.
               </p>
@@ -346,7 +332,7 @@ export function SimulatorTemplate() {
               <h3 className="font-semibold mb-2 text-sena-green">
                 Modelos disponibles
               </h3>
-              <ul className="text-xs md:text-sm text-muted-foreground space-y-1">
+              <ul className="text-xs md:text-sm text-gray-500 space-y-1">
                 <li>• <strong>SDM-NR:</strong> Modelo de un diodo (Newton-Raphson)</li>
                 <li>• <strong>SDM-Lambert:</strong> Solución analítica explícita (Barry 2000)</li>
                 <li>• <strong>DDM:</strong> Modelo de dos diodos (Olayiwola 2024)</li>
@@ -363,7 +349,7 @@ export function SimulatorTemplate() {
                 <BookOpen className="w-4 h-4" />
                 Referencias
               </h3>
-              <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+              <p className="text-xs text-gray-500 mb-3 leading-relaxed">
                 Este simulador está basado en modelos matemáticos publicados en
                 revistas indexadas (IEEE, MDPI). La bibliografía completa en
                 formato APA 7 está disponible en el siguiente enlace.
@@ -372,7 +358,7 @@ export function SimulatorTemplate() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowReferences(true)}
-                className="text-xs border-sena-green/30 text-sena-green hover:bg-sena-green/10"
+                className="text-xs border-sena-green/40 text-sena-green hover:bg-sena-green hover:text-white hover:border-sena-green"
               >
                 Ver bibliografía completa
               </Button>
@@ -381,25 +367,54 @@ export function SimulatorTemplate() {
             {/* Col 4: Créditos */}
             <div>
               <h3 className="font-semibold mb-2 text-sena-green">Créditos</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">
-                <strong className="text-foreground">Autor:</strong> Ing.
+              <p className="text-xs md:text-sm text-gray-500">
+                <strong className="text-gray-700">Autor:</strong> Ing.
                 Mauricio Alexander Vargas Rodríguez, M.Sc., MBA Esp. PM
               </p>
-              <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                <strong className="text-foreground">Institución:</strong> Centro
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
+                <strong className="text-gray-700">Institución:</strong> Centro
                 de Electricidad, Electrónica y Telecomunicaciones (CEET)
               </p>
-              <p className="text-xs md:text-sm text-muted-foreground mt-1">
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
                 Servicio Nacional de Aprendizaje - SENA
               </p>
-              <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                <strong className="text-foreground">Laboratorio:</strong> LEPS -
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
+                <strong className="text-gray-700">Laboratorio:</strong> LEPS -
                 Laboratorio de Ensayos para Paneles Solares
               </p>
-              <p className="text-[10px] md:text-xs text-muted-foreground/70 mt-3">
+              <p className="text-[10px] md:text-xs text-gray-400 mt-3">
                 Versión Web 2.3 • Next.js 16 • Tailwind v4 • © 2026
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer institucional */}
+      <footer className="bg-sena-green text-white py-6 px-4 md:px-8 border-t-4 border-sena-blue mt-auto z-50 relative shrink-0">
+        <div className="max-w-7xl mx-auto flex flex-col xl:flex-row items-center justify-between gap-6">
+          {/* Logos institucionales */}
+          <div className="flex items-center gap-5 sm:gap-6 flex-shrink-0">
+            <img
+              src="/logo-centro-formacion-white.svg"
+              alt="Centro de Electricidad, Electrónica y Telecomunicaciones - SENA"
+              className="h-10 sm:h-12 md:h-14 w-auto drop-shadow-sm object-contain"
+            />
+            <div className="w-px h-10 sm:h-12 bg-white/30" />
+            <img
+              src="/logo-grupo-investigacion.svg"
+              alt="Grupo de Investigación GICS"
+              className="h-10 sm:h-12 md:h-14 w-auto brightness-0 invert drop-shadow-sm object-contain"
+            />
+          </div>
+          {/* Texto institucional */}
+          <div className="text-center xl:text-right mt-2 md:mt-0 flex-1">
+            <p className="text-sm md:text-base font-semibold tracking-wide text-white">
+              © 2026 Servicio Nacional de Aprendizaje — SENA
+            </p>
+            <p className="text-xs md:text-sm text-white/90 mt-1 leading-snug">
+              Centro de Electricidad, Electrónica y Telecomunicaciones · Regional Distrito Capital
+            </p>
           </div>
         </div>
       </footer>
@@ -414,7 +429,7 @@ function EmptyState() {
     <Card className="glass flex items-center justify-center h-[300px]">
       <CardContent className="text-center p-6">
         <Sun className="w-12 h-12 text-sena-green/30 mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-gray-400">
           Ejecuta la simulación para ver los resultados
         </p>
       </CardContent>

@@ -203,7 +203,7 @@ export function ResultsPanel({ results, params, chartRef, multiGResults, multiTR
         </div>
 
         {/* Parámetros calculados */}
-        <div className="p-3 bg-muted/30 rounded-lg">
+        <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
           <p className="text-xs font-medium text-muted-foreground mb-2">
             Parámetros Calculados
           </p>

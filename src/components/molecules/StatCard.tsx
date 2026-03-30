@@ -15,7 +15,7 @@ const variantStyles = {
   solar: "from-sena-yellow/20 to-sena-yellow/10 border-sena-yellow/30",
   volt: "from-sena-green/20 to-sena-green-dark/10 border-sena-green/30",
   current: "from-current-500/20 to-current-600/10 border-current-500/30",
-  blue: "from-sena-navy/20 to-sena-navy/10 border-sena-cyan/30",
+  blue: "from-sena-blue/10 to-sena-blue/5 border-sena-blue/20",
   default: "from-muted/50 to-muted/30 border-border",
 };
 
@@ -23,7 +23,7 @@ const iconStyles = {
   solar: "text-sena-yellow",
   volt: "text-sena-green",
   current: "text-current-500",
-  blue: "text-sena-cyan",
+  blue: "text-sena-blue",
   default: "text-muted-foreground",
 };
 

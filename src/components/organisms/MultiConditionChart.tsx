@@ -39,8 +39,8 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
   const v = payload[0]?.payload?.voltage;
   return (
-    <div className="bg-card/95 backdrop-blur-sm border rounded-lg p-2 shadow-lg text-xs">
-      <p className="text-muted-foreground mb-1">V = {v?.toFixed(2)} V</p>
+    <div className="bg-white border border-gray-200 rounded-lg p-2 shadow-lg text-xs">
+      <p className="text-gray-500 mb-1">V = {v?.toFixed(2)} V</p>
       {payload.map((p, i) => (
         <p key={i} style={{ color: p.color }}>{p.name}: {p.value?.toFixed(3)}</p>
       ))}
@@ -84,7 +84,7 @@ function MultiConditionChart({ results, params }, ref) {
   const captureElement = async (el: HTMLDivElement | null): Promise<string | undefined> => {
     if (!el) return undefined;
     const html2canvas = (await import("html2canvas")).default;
-    const canvas = await html2canvas(el, { backgroundColor: "#020617", scale: 2 });
+    const canvas = await html2canvas(el, { backgroundColor: "#ffffff", scale: 2 });
     return canvas.toDataURL("image/png");
   };
 
@@ -192,7 +192,7 @@ function MultiConditionChart({ results, params }, ref) {
             <CardTitle className="text-base md:text-lg">
               {mode === 'multi-g' ? 'Análisis Multi-Irradiancia' : 'Análisis Multi-Temperatura'}
             </CardTitle>
-            <Badge variant="secondary" className="text-[10px]">
+            <Badge className="text-[10px] bg-sena-green/15 text-sena-green border-sena-green/30">
               {curves.length} curvas
             </Badge>
           </div>
