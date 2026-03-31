@@ -64,7 +64,7 @@ export function Header({ onAboutClick }: HeaderProps) {
         <div className="md:hidden flex items-center shrink-0">
           <button
             type="button"
-            className="p-2 text-white/90 rounded-lg hover:bg-white/10 transition-colors"
+            className="p-2 text-white/90 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
@@ -92,7 +92,7 @@ export function Header({ onAboutClick }: HeaderProps) {
               Acerca de
             </button>
             <div className="flex items-center justify-between pt-3 pb-1 px-3 border-t border-white/20 mt-2">
-              <span className="text-xs text-white/70 font-medium">SENA · CEET · LEPS</span>
+              <span className="text-xs text-white/70 font-medium">SENA — CEET · LEPS</span>
               <span className="text-[10px] font-medium bg-white/10 text-white/80 px-2 py-0.5 rounded-full border border-white/20">
                 v2.4
               </span>

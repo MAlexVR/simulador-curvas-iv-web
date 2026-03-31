@@ -146,9 +146,10 @@
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: var(--color-foreground);
-    line-height: 1.625;
+    font-family: "Work Sans", system-ui, -apple-system, sans-serif;
+    background-color: #f9fafb;
+    color: #1f2937;
+    line-height: 1.6;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -157,6 +158,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
+    color: var(--color-sena-blue);
     line-height: 1.3;
   }
 
@@ -168,15 +170,15 @@
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background-color: #e5e7eb;
+    background-color: #f2f2f2;
+    border-radius: 0.375rem;
   }
   ::-webkit-scrollbar-thumb {
     background-color: #39a900;
-    border-radius: 9999px;
+    border-radius: 0.375rem;
   }
   ::-webkit-scrollbar-thumb:hover {
     background-color: #007832;
