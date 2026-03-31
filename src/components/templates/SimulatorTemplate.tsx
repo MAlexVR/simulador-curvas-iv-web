@@ -24,6 +24,7 @@ import {
   LoaderCircle,
   BookOpen
 } from "lucide-react";
+import Image from "next/image";
 import { ReferencesModal } from "@/components/organisms/ReferencesModal";
 
 export function SimulatorTemplate() {
@@ -387,15 +388,19 @@ export function SimulatorTemplate() {
         <div className="max-w-7xl mx-auto flex flex-col xl:flex-row items-center justify-between gap-6">
           {/* Logos institucionales */}
           <div className="flex items-center gap-5 sm:gap-6 flex-shrink-0">
-            <img
+            <Image
               src="/logo-centro-formacion-white.svg"
               alt="Centro de Electricidad, Electrónica y Telecomunicaciones - SENA"
+              width={100}
+              height={50}
               className="h-10 sm:h-12 md:h-14 w-auto drop-shadow-sm object-contain"
             />
             <div className="w-px h-10 sm:h-12 bg-white/30" />
-            <img
+            <Image
               src="/logo-grupo-investigacion.svg"
               alt="Grupo de Investigación GICS"
+              width={100}
+              height={50}
               className="h-10 sm:h-12 md:h-14 w-auto brightness-0 invert drop-shadow-sm object-contain"
             />
           </div>
