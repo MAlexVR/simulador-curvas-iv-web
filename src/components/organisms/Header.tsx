@@ -17,7 +17,7 @@ export function Header({ onAboutClick }: HeaderProps) {
   };
 
   return (
-    <header className="w-full bg-sena-green text-white py-3 px-4 md:px-8 border-b-4 border-sena-blue shadow-sm sticky top-0 z-50">
+    <header className="w-full bg-sena-green text-white py-3 px-4 md:px-8 border-b-4 border-sena-blue shadow-sm sticky top-0 z-50 transition-all">
       <div className="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4">
         {/* Logo + título */}
         <div className="flex items-center gap-3 md:gap-4 flex-shrink min-w-0">
@@ -77,7 +77,7 @@ export function Header({ onAboutClick }: HeaderProps) {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-sena-green border-t border-white/20 mt-3 pt-2">
+        <div id="mobile-menu" className="md:hidden bg-sena-green border-t border-white/20 mt-3 pt-2 animate-in slide-in-from-top-2">
           <div className="space-y-1">
             <UserManualModal triggerClassName="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:bg-white/10 transition-colors">
               <HelpCircle size={18} className="text-white/70" />

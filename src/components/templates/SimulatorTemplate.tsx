@@ -402,10 +402,10 @@ export function SimulatorTemplate() {
           {/* Texto institucional */}
           <div className="text-center xl:text-right mt-2 md:mt-0 flex-1">
             <p className="text-sm md:text-base font-semibold tracking-wide text-white">
-              © 2026 Servicio Nacional de Aprendizaje — SENA
+              &copy; {new Date().getFullYear()} Servicio Nacional de Aprendizaje - SENA
             </p>
             <p className="text-xs md:text-sm text-white/90 mt-1 leading-snug">
-              Centro de Electricidad, Electrónica y Telecomunicaciones · Regional Distrito Capital
+              Centro de Electricidad, Electrónica y Telecomunicaciones (CEET) &middot; Regional Distrito Capital
             </p>
           </div>
         </div>
