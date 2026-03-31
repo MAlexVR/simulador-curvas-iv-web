@@ -42,7 +42,7 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
     <div className="bg-white border border-gray-200 rounded-lg p-2 shadow-lg text-xs">
       <p className="text-gray-500 mb-1">V = {v?.toFixed(2)} V</p>
       {payload.map((p, i) => (
-        <p key={i} style={{ color: p.color }}>{p.name}: {p.value?.toFixed(3)}</p>
+        <p key={p.name ?? i} style={{ color: p.color }}>{p.name}: {p.value?.toFixed(3)}</p>
       ))}
     </div>
   );
@@ -70,6 +70,8 @@ function MultiConditionChart({ results, params }, ref) {
         setter({ width, height });
       });
       observer.observe(el);
+      const { width, height } = el.getBoundingClientRect();
+      if (width > 0 && height > 0) setter({ width, height });
       return () => observer.disconnect();
     };
     const cleanIv = observePanel(ivPanelRef, setIvSize);
@@ -96,7 +98,9 @@ function MultiConditionChart({ results, params }, ref) {
       const link = document.createElement("a");
       link.download = `curvas_${mode === 'multi-g' ? 'multi-irradiancia' : 'multi-temperatura'}.png`;
       link.href = image;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error("Error exportando imagen:", error);
     }
@@ -113,6 +117,7 @@ function MultiConditionChart({ results, params }, ref) {
       await generatePDFReport({ params, multiResults: results, ivChartImage: ivImage, pvChartImage: pvImage });
     } catch (error) {
       console.error("Error generando PDF:", error);
+      alert("Error al generar el reporte PDF");
     } finally {
       setIsGeneratingPDF(false);
     }
@@ -149,13 +154,13 @@ function MultiConditionChart({ results, params }, ref) {
       {ivSize.width > 0 && ivSize.height > 0 && (
         <ResponsiveContainer width={ivSize.width} height={ivSize.height} minWidth={0}>
           <ComposedChart data={chartData} margin={{ top: 5, right: 10, left: 5, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-            <XAxis dataKey="voltage" type="number" domain={["dataMin", "dataMax"]} stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(0)} />
-            <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(2)} width={45} domain={[0, 'auto']} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
+            <XAxis dataKey="voltage" type="number" domain={["dataMin", "dataMax"]} stroke="#9ca3af" tick={{ fill: "#9ca3af", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(0)} />
+            <YAxis stroke="#9ca3af" tick={{ fill: "#9ca3af", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(2)} width={45} domain={[0, 'auto']} />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: "10px" }} />
             {curves.map((_, ci) => (
-              <Line key={ci} type="monotone" dataKey={`current_${ci}`} stroke={colors[ci]} strokeWidth={2} dot={false} name={labels[ci]} activeDot={{ r: 3 }} />
+              <Line key={labels[ci]} type="monotone" dataKey={`current_${ci}`} stroke={colors[ci]} strokeWidth={2} dot={false} name={labels[ci]} activeDot={{ r: 3 }} />
             ))}
           </ComposedChart>
         </ResponsiveContainer>
@@ -169,13 +174,13 @@ function MultiConditionChart({ results, params }, ref) {
       {pvSize.width > 0 && pvSize.height > 0 && (
         <ResponsiveContainer width={pvSize.width} height={pvSize.height} minWidth={0}>
           <ComposedChart data={pvData} margin={{ top: 5, right: 10, left: 5, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-            <XAxis dataKey="voltage" type="number" domain={["dataMin", "dataMax"]} stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(0)} />
-            <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(1)} width={45} domain={[0, 'auto']} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
+            <XAxis dataKey="voltage" type="number" domain={["dataMin", "dataMax"]} stroke="#9ca3af" tick={{ fill: "#9ca3af", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(0)} />
+            <YAxis stroke="#9ca3af" tick={{ fill: "#9ca3af", fontSize: 10 }} tickFormatter={(v: number) => v.toFixed(1)} width={45} domain={[0, 'auto']} />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: "10px" }} />
             {curves.map((_, ci) => (
-              <Line key={ci} type="monotone" dataKey={`power_${ci}`} stroke={colors[ci]} strokeWidth={2} dot={false} name={labels[ci]} activeDot={{ r: 3 }} />
+              <Line key={labels[ci]} type="monotone" dataKey={`power_${ci}`} stroke={colors[ci]} strokeWidth={2} dot={false} name={labels[ci]} activeDot={{ r: 3 }} />
             ))}
           </ComposedChart>
         </ResponsiveContainer>

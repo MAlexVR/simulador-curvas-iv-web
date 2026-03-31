@@ -130,6 +130,7 @@ export function ReferencesModal({ open, onClose }: ReferencesModalProps) {
     <Modal
       open={open}
       onClose={onClose}
+      description="Lista de referencias bibliográficas en formato APA 7"
       title={
         <>
           <BookOpen className="w-5 h-5 text-sena-green" />
@@ -161,9 +162,9 @@ export function ReferencesModal({ open, onClose }: ReferencesModalProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 ml-1.5 text-sena-green hover:underline"
-                  aria-label="Abrir en fuente original"
+                  aria-label={`Ver fuente: referencia ${ref.id}`}
                 >
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>
               )}
             </span>

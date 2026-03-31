@@ -4,23 +4,40 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+type ModalWidth = "md" | "lg" | "xl" | "2xl" | "3xl";
+
+const widthClass: Record<ModalWidth, string> = {
+  md: "max-w-md",
+  lg: "max-w-lg",
+  xl: "max-w-xl",
+  "2xl": "max-w-2xl",
+  "3xl": "max-w-3xl",
+};
+
 interface ModalProps {
   open: boolean;
   onClose: () => void;
   title: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;
-  maxWidth?: string;
+  maxWidth?: ModalWidth;
+  description?: string;
 }
 
-export function Modal({ open, onClose, title, children, footer, maxWidth = "max-w-2xl" }: ModalProps) {
+export function Modal({ open, onClose, title, children, footer, maxWidth = "2xl", description }: ModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={(v) => !v && onClose()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
         <Dialog.Content
-          className={`fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full ${maxWidth} max-h-[85vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-modal`}
+          className={`fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full ${widthClass[maxWidth]} max-h-[85vh] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-modal`}
         >
+          {description && (
+            <Dialog.Description className="sr-only">
+              {description}
+            </Dialog.Description>
+          )}
+
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 bg-gray-50/50 border-b border-gray-100 flex-shrink-0">
             <Dialog.Title className="text-base font-semibold text-sena-blue flex items-center gap-2">

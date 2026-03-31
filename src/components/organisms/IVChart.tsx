@@ -67,6 +67,8 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
         setContainerSize({ width, height });
       });
       observer.observe(el);
+      const { width, height } = el.getBoundingClientRect();
+      if (width > 0 && height > 0) setContainerSize({ width, height });
       return () => observer.disconnect();
     }, []);
 
@@ -86,7 +88,9 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
         const link = document.createElement("a");
         link.download = `${params.referencia}_curvas.png`;
         link.href = canvas.toDataURL("image/png");
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
       } catch (error) {
         console.error("Error exportando imagen:", error);
       }
@@ -146,14 +150,14 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
                   data={chartData}
                   margin={{ top: 10, right: 10, left: 5, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-                  
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.5} />
+
                   <XAxis
                     dataKey="voltage"
                     type="number"
                     domain={["dataMin", "dataMax"]}
-                    stroke="hsl(var(--muted-foreground))"
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+                    stroke="#9ca3af"
+                    tick={{ fill: "#9ca3af", fontSize: 10 }}
                     tickFormatter={(v) => v.toFixed(0)}
                   />
                   
@@ -179,7 +183,7 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
                   <Legend
                     wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }}
                     formatter={(value) => (
-                      <span className="text-muted-foreground text-xs">{value}</span>
+                      <span style={{ color: "#9ca3af" }} className="text-xs">{value}</span>
                     )}
                   />
                   
@@ -255,14 +259,14 @@ export const IVChart = forwardRef<IVChartHandle, IVChartProps>(
                   <ReferenceDot
                     yAxisId="current"
                     x={0}
-                    y={params.isc}
+                    y={results.current[0]}
                     r={4}
                     fill="#ef4444"
                   />
-                  
+
                   <ReferenceDot
                     yAxisId="current"
-                    x={params.voc}
+                    x={results.voltage[results.voltage.length - 1]}
                     y={0}
                     r={4}
                     fill="#00324D"

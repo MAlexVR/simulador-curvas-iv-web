@@ -44,13 +44,14 @@ export function Header({ onAboutClick }: HeaderProps) {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
           <span className="text-[10px] font-medium bg-white/10 text-white/90 px-2 py-1 rounded-full mr-2 border border-white/20 select-none">
-            v2.3
+            v2.4
           </span>
           <UserManualModal triggerClassName="flex items-center gap-1.5 px-3 py-2 h-auto rounded-lg text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors font-medium border border-transparent">
             <HelpCircle size={16} />
             <span>Manual de Usuario</span>
           </UserManualModal>
           <button
+            type="button"
             onClick={handleAboutClick}
             className="flex items-center gap-1.5 px-3 py-2 h-auto rounded-lg text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors font-medium border border-transparent"
           >
@@ -62,8 +63,12 @@ export function Header({ onAboutClick }: HeaderProps) {
         {/* Mobile hamburger */}
         <div className="md:hidden flex items-center shrink-0">
           <button
+            type="button"
             className="p-2 text-white/90 rounded-lg hover:bg-white/10 transition-colors"
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -72,13 +77,14 @@ export function Header({ onAboutClick }: HeaderProps) {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <div className="md:hidden bg-sena-green border-t border-white/20 mt-3 pt-2">
+        <div id="mobile-menu" className="md:hidden bg-sena-green border-t border-white/20 mt-3 pt-2">
           <div className="space-y-1">
             <UserManualModal triggerClassName="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:bg-white/10 transition-colors">
               <HelpCircle size={18} className="text-white/70" />
               <span>Manual de Usuario</span>
             </UserManualModal>
             <button
+              type="button"
               onClick={handleAboutClick}
               className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:bg-white/10 transition-colors"
             >
@@ -88,7 +94,7 @@ export function Header({ onAboutClick }: HeaderProps) {
             <div className="flex items-center justify-between pt-3 pb-1 px-3 border-t border-white/20 mt-2">
               <span className="text-xs text-white/70 font-medium">SENA · CEET · LEPS</span>
               <span className="text-[10px] font-medium bg-white/10 text-white/80 px-2 py-0.5 rounded-full border border-white/20">
-                v2.3
+                v2.4
               </span>
             </div>
           </div>

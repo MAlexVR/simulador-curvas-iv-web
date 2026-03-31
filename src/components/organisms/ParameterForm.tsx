@@ -125,9 +125,75 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
     const a = document.createElement("a");
     a.href = url;
     a.download = `${params.referencia || "modulo"}.json`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   };
+
+  const defectControls = selectedDefect ? (() => {
+    const defect = DEFECTS.find(d => d.id === selectedDefect);
+    if (!defect) return null;
+    return (
+      <div className="space-y-2">
+        <div className="flex gap-1">
+          {(['leve', 'moderado', 'severo'] as DefectSeverity[]).map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setDefectSeverity(s)}
+              className={`flex-1 py-1 text-[10px] rounded border transition-colors capitalize ${
+                defectSeverity === s
+                  ? s === 'leve'
+                    ? 'bg-sena-yellow/20 border-sena-yellow/50 text-sena-yellow font-medium'
+                    : s === 'moderado'
+                    ? 'bg-orange-500/20 border-orange-500/50 text-orange-400 font-medium'
+                    : 'bg-destructive/20 border-destructive/50 text-destructive font-medium'
+                  : 'bg-muted/30 border-transparent text-muted-foreground'
+              }`}
+            >
+              {defect.levels[s].label}
+            </button>
+          ))}
+        </div>
+
+        <div className="p-2 bg-gray-50 border border-gray-100 rounded-md space-y-1">
+          <p className="text-[10px] font-medium text-muted-foreground">
+            {defect.parameter}: {defect.levels[defectSeverity].description}
+          </p>
+          <p className="text-[10px] text-muted-foreground/80 leading-relaxed">
+            {defect.curveEffect}
+          </p>
+          <p className="text-[9px] text-muted-foreground/50 italic">
+            {defect.reference}
+          </p>
+        </div>
+
+        <div className="flex gap-1.5">
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleApplyDefect}
+            disabled={defectApplied}
+            className="flex-1 h-7 text-[10px] bg-orange-500/80 hover:bg-orange-500 text-white"
+          >
+            Aplicar defecto
+          </Button>
+          {defectApplied && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={handleRemoveDefect}
+              className="flex-1 h-7 text-[10px]"
+            >
+              Quitar
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  })() : null;
 
   return (
     <Card className="glass">
@@ -480,6 +546,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
                   onChange={(e) => {
                     setSelectedDefect(e.target.value as DefectType | '');
                     setDefectApplied(false);
+                    originalRef.current = null;
                   }}
                   className="w-full h-8 px-2 text-xs bg-background border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-ring"
                 >
@@ -489,68 +556,7 @@ export function ParameterForm({ params, onChange, onReset }: ParameterFormProps)
                   ))}
                 </select>
 
-                {selectedDefect && (() => {
-                  const defect = DEFECTS.find(d => d.id === selectedDefect)!;
-                  return (
-                    <div className="space-y-2">
-                      <div className="flex gap-1">
-                        {(['leve', 'moderado', 'severo'] as DefectSeverity[]).map((s) => (
-                          <button
-                            key={s}
-                            type="button"
-                            onClick={() => setDefectSeverity(s)}
-                            className={`flex-1 py-1 text-[10px] rounded border transition-colors capitalize ${
-                              defectSeverity === s
-                                ? s === 'leve'
-                                  ? 'bg-sena-yellow/20 border-sena-yellow/50 text-sena-yellow font-medium'
-                                  : s === 'moderado'
-                                  ? 'bg-orange-500/20 border-orange-500/50 text-orange-400 font-medium'
-                                  : 'bg-destructive/20 border-destructive/50 text-destructive font-medium'
-                                : 'bg-muted/30 border-transparent text-muted-foreground'
-                            }`}
-                          >
-                            {defect.levels[s].label}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="p-2 bg-gray-50 border border-gray-100 rounded-md space-y-1">
-                        <p className="text-[10px] font-medium text-muted-foreground">
-                          {defect.parameter}: {defect.levels[defectSeverity].description}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground/80 leading-relaxed">
-                          {defect.curveEffect}
-                        </p>
-                        <p className="text-[9px] text-muted-foreground/50 italic">
-                          {defect.reference}
-                        </p>
-                      </div>
-
-                      <div className="flex gap-1.5">
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={handleApplyDefect}
-                          disabled={defectApplied}
-                          className="flex-1 h-7 text-[10px] bg-orange-500/80 hover:bg-orange-500 text-white"
-                        >
-                          Aplicar defecto
-                        </Button>
-                        {defectApplied && (
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            onClick={handleRemoveDefect}
-                            className="flex-1 h-7 text-[10px]"
-                          >
-                            Quitar
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })()}
+                {defectControls}
               </div>
             </TabsContent>
           </Tabs>

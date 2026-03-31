@@ -45,15 +45,16 @@ export function UserManualModal({
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        maxWidth="max-w-3xl"
+        maxWidth="3xl"
+        description="Manual de usuario del simulador de curvas I-V"
         title={
           <>
             <HelpCircle className="h-5 w-5 text-sena-green" />
-            Manual de Usuario — Simulador PV v2.3
+            Manual de Usuario — Simulador PV v2.4
           </>
         }
         footer={
-          <span className="text-[10px] text-gray-400">Versión 2.3 · SENA CEET — LEPS</span>
+          <span className="text-[10px] text-gray-400">Versión 2.4 · SENA CEET — LEPS</span>
         }
       >
         <div className="space-y-6 text-sm text-gray-700">

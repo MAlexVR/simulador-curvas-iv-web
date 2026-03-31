@@ -26,12 +26,11 @@ import {
 interface ResultsPanelProps {
   results: SimulationResults;
   params: ModuleParams;
-  chartRef?: React.RefObject<HTMLDivElement | null>;
   multiGResults?: MultiConditionResults;
   multiTResults?: MultiConditionResults;
 }
 
-export function ResultsPanel({ results, params, chartRef, multiGResults, multiTResults }: ResultsPanelProps) {
+export function ResultsPanel({ results, params, multiGResults, multiTResults }: ResultsPanelProps) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleExportCSV = () => {
@@ -41,8 +40,10 @@ export function ResultsPanel({ results, params, chartRef, multiGResults, multiTR
     const a = document.createElement("a");
     a.href = url;
     a.download = `${params.referencia}_datos.csv`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
   };
 
   const handleExportExcel = async () => {

@@ -1,4 +1,4 @@
-# Simulador de Curvas I-V y P-V v2.3
+# Simulador de Curvas I-V y P-V v2.4
 
 Aplicación web para simular el comportamiento eléctrico de paneles solares fotovoltaicos. Genera las curvas características **I-V** (Corriente vs Voltaje) y **P-V** (Potencia vs Voltaje) utilizando cuatro modelos matemáticos seleccionables: SDM Newton-Raphson, SDM Lambert W, DDM y TDM.
 
@@ -189,6 +189,23 @@ El simulador incluye un módulo de degradación de paneles con 5 defectos físic
 | LID — Deg. inducida por luz | Isc ↓ + n ↑ | 1% / 2% / 3% | Hahnloser 2006 |
 
 ## Changelog
+
+### v2.4.0 (2026)
+- **Refactor UX/UI completo**: tema claro, encabezado institucional verde SENA con borde azul, pie de página institucional con logos, tipografía y espaciado refinados para escritorio y móvil
+- **Tokens de color coherentes**: sistema de colores `sena-green`, `sena-blue`, `sena-blue-light` aplicado consistentemente en gráficas, badges, botones e indicadores — eliminados `sena-navy`/`sena-cyan` (diseñados para modo oscuro)
+- **Sección "Acerca de" en la interfaz principal**: descripción del programa, modelos disponibles, enlace a bibliografía y créditos visibles en la interfaz principal (scrollable desde el encabezado)
+- **Judgment Day bugfixes** (revisión adversarial 2 jueces × 2 rondas):
+  - Corregida violación HTML: doble elemento `<main>` en modo móvil/escritorio; unificado en un único landmark
+  - Sección "Acerca de" movida dentro de `<main>` con `aria-labelledby` para estructura de documento accesible
+  - Firefox ResizeObserver: inicialización sincrónica con `getBoundingClientRect()` para evitar gráficas en blanco en primera carga
+  - `key={labels[ci]}` en `<Line>` de MultiConditionChart (estabilidad de reconciliación React)
+  - `Dialog.Description` condicional con descripciones específicas por modal (sin fallback genérico)
+  - `IVChart` ReferenceDot Isc/Voc ahora usa valores simulados (`results.current/voltage`) en lugar de parámetros de hoja de datos (corrección en modo defecto)
+  - `ParameterForm` `originalRef` se limpia al cambiar el tipo de defecto (previene restauración incorrecta)
+  - Prop `chartRef` muerta eliminada de `ResultsPanel`
+  - `body { background-color }` usa token CSS `hsl(var(--background))`
+  - `aria-hidden="true"` en ícono decorativo `<ExternalLink>` en `ReferencesModal`
+  - Safari/Firefox: descargas CSV/PNG/Excel con patrón DOM append + `setTimeout` revoke
 
 ### v2.3.1 (2026)
 - **Fix definitivo Recharts warnings**: reemplazado el `mounted` guard por `ResizeObserver` en `IVChart` y `MultiConditionChart`. El observer pasa dimensiones reales en píxeles directamente a `ResponsiveContainer`, eliminando el estado inicial `-1` de Recharts. Root cause: los layouts mobile (`md:hidden`) y desktop (`hidden md:block`) están ambos en el DOM; el container oculto medía `0/0` causando 8 advertencias por simulación.

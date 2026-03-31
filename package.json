@@ -1,6 +1,6 @@
 {
   "name": "curvas-iv-simulator",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Simulador de curvas I-V y P-V de módulos fotovoltaicos - SENA CEET",
   "private": true,
   "scripts": {

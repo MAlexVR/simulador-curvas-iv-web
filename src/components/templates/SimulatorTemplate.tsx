@@ -38,7 +38,6 @@ export function SimulatorTemplate() {
   const [chartMode, setChartMode] = useState<ChartMode>('individual');
   const aboutRef = useRef<HTMLElement>(null);
   const chartRef = useRef<IVChartHandle>(null);
-  const chartContainerRef = useRef<HTMLDivElement>(null);
 
   // El selector de modo solo cambia qué se VISUALIZA — siempre se computan los tres
   const activeMultiResults = chartMode === 'multi-g' ? multiGResults : chartMode === 'multi-t' ? multiTResults : null;
@@ -83,19 +82,13 @@ export function SimulatorTemplate() {
     aboutRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Get chart element for PDF export
-  const getChartRef = () => {
-    return {
-      current: chartRef.current?.getChartElement() ?? null
-    };
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header onAboutClick={scrollToAbout} />
 
+      <main className="flex flex-col flex-1">
       {/* Mobile Layout: Tabs */}
-      <main className="flex-1 container px-3 py-3 md:hidden">
+      <div className="flex-1 container px-3 py-3 md:hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col">
           <TabsList className="grid w-full grid-cols-3 mb-3">
             <TabsTrigger value="params" className="text-xs">
@@ -183,7 +176,6 @@ export function SimulatorTemplate() {
               <ResultsPanel
                 results={results}
                 params={params}
-                chartRef={getChartRef()}
                 multiGResults={multiGResults ?? undefined}
                 multiTResults={multiTResults ?? undefined}
               />
@@ -192,10 +184,10 @@ export function SimulatorTemplate() {
             )}
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
 
       {/* Desktop Layout: 3 columns */}
-      <main className="hidden md:block flex-1 container py-4 lg:py-6">
+      <div className="hidden md:block flex-1 container py-4 lg:py-6">
         {error && (
           <div className="mb-4 p-4 bg-destructive/10 border border-destructive/30 rounded-lg flex items-start gap-3 max-w-2xl mx-auto">
             <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
@@ -288,8 +280,7 @@ export function SimulatorTemplate() {
                   <ResultsPanel
                     results={results}
                     params={params}
-                    chartRef={getChartRef()}
-                    multiGResults={multiGResults ?? undefined}
+                        multiGResults={multiGResults ?? undefined}
                     multiTResults={multiTResults ?? undefined}
                   />
                 ) : (
@@ -306,15 +297,15 @@ export function SimulatorTemplate() {
             </aside>
           )}
         </div>
-      </main>
+      </div>
 
       {/* Acerca de */}
-      <section ref={aboutRef} className="border-t bg-white mt-auto scroll-mt-4">
+      <section ref={aboutRef} aria-labelledby="about-heading" className="border-t bg-white mt-auto scroll-mt-20">
         <div className="container px-4 py-6 md:py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-sm">
             {/* Col 1: descripción */}
             <div>
-              <h3 className="font-semibold mb-2 text-sena-green">
+              <h3 id="about-heading" className="font-semibold mb-2 text-sena-green">
                 ¿Qué es este simulador?
               </h3>
               <p className="text-gray-500 text-xs md:text-sm leading-relaxed">
@@ -383,12 +374,13 @@ export function SimulatorTemplate() {
                 Laboratorio de Ensayos para Paneles Solares
               </p>
               <p className="text-[10px] md:text-xs text-gray-400 mt-3">
-                Versión Web 2.3 • Next.js 16 • Tailwind v4 • © 2026
+                Versión Web 2.4 • Next.js 16 • Tailwind v4 • © 2026
               </p>
             </div>
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer institucional */}
       <footer className="bg-sena-green text-white py-6 px-4 md:px-8 border-t-4 border-sena-blue mt-auto z-50 relative shrink-0">
