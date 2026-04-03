@@ -57,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${workSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${workSans.variable} ${jetbrainsMono.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
         {children}
       </body>
