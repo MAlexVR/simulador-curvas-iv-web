@@ -1,5 +1,13 @@
 # Simulador de Curvas I-V y P-V v2.4
 
+![SENA](https://img.shields.io/badge/SENA-CEET-39A900?style=flat-square)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38BDF8?style=flat-square&logo=tailwindcss)
+![Recharts](https://img.shields.io/badge/Recharts-3.8-F5A623?style=flat-square)
+![jsPDF](https://img.shields.io/badge/jsPDF-4.2-F5A623?style=flat-square)
+
 Aplicación web para simular el comportamiento eléctrico de paneles solares fotovoltaicos. Genera las curvas características **I-V** (Corriente vs Voltaje) y **P-V** (Potencia vs Voltaje) utilizando cuatro modelos matemáticos seleccionables: SDM Newton-Raphson, SDM Lambert W, DDM y TDM.
 
 ## Modelos Matemáticos
